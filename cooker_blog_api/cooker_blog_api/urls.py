@@ -22,7 +22,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Ycook API",
+        title="cooker blog API",
         default_version='v1',
         description="Test description",
         terms_of_service="https://www.Ycook.com/policies/terms/",
@@ -35,8 +35,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('auth_api.urls')),
-    path('api/', include('blog_api.urls')),
+    path('api/auth/', include('auth_api.urls')),
+    path('api/blog/', include('blog_api.urls')),
 
 
     path('', schema_view.with_ui('swagger', cache_timeout=0),

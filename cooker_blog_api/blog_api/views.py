@@ -23,6 +23,11 @@ class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     lookup_field = "id"
 
+    # def update(self, request, *args, **kwargs):
+    #     post = self.get_object()
+    #     post.ingredient.clear()
+    #     return super().update(request, *args, **kwargs)
+
 
     # def get_queryset(self):
     #     return self.queryset.filter(owner=self.request.Post)
