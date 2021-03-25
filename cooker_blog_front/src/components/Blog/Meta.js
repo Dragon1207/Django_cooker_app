@@ -5,7 +5,7 @@ export default function Meta(props) {
   return (
     <>
       <div className="meta">
-        Categorie: {data.cate}, Date: {data.date}, Auteur: {data.author}
+        Date: {data.date}, Auteur: {data.author}
       </div>
     </>
   );

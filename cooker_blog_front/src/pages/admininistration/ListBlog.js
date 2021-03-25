@@ -34,7 +34,7 @@ export default function ListBlog() {
     }))(TableRow);
 
     return (<>
-            <Container maxWidth="lg">
+        <Container maxWidth="lg">
             <h1>Administrer les articles</h1>
             <Link to="/admin/blog/create">
                 <Button variant="contained" color="primary" style={{marginBottom: '20px'}}>

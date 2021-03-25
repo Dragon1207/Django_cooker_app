@@ -9,7 +9,7 @@ export default function BlogSidebar(props) {
 
   return(
     <>
-      <Container>
+      <Container maxWidth="lg" style={{marginTop:'5%'}}>
         <Row>
           <Col xs md='8' lg='8' className="posts-list" >
             {children}
