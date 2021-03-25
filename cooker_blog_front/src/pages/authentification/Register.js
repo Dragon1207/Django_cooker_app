@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../axios';
 import { useHistory } from 'react-router-dom';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
@@ -57,6 +57,26 @@ export default function SignUp() {
         });
     };
 
+    useEffect(() => {
+        if(refresh_token){
+            axiosInstance.post(`auth/token/refresh/`, {
+             refresh: refresh_token,
+         })
+         .then((res) => {
+             if(res.status === 200){
+               localStorage.setItem('access', res.data.access);
+               axiosInstance.defaults.headers['Authorization'] =
+             'Bearer ' + access_token;
+             }else{
+                history.push('/login');
+             }
+                console.log(res);
+         });
+       }else{
+               history.push('/login');   
+       }
+     }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
@@ -70,7 +90,7 @@ export default function SignUp() {
         //         console.log(res.data);
         //     });
         
-            axios.post('auth/register/', formData)
+        axiosInstance.post('auth/register/', formData)
             .then(response => { 
                 history.push('login/');
                 console.log(response)

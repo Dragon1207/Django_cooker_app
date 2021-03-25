@@ -59,7 +59,11 @@ export default function SignIn() {
             refresh: refresh_token,
         })
         .then((res) => {
+<<<<<<< Updated upstream
             if(res.status == 200){
+=======
+            if(res.status === 200){
+>>>>>>> Stashed changes
               localStorage.setItem('access', res.data.access);
               axiosInstance.defaults.headers['Authorization'] =
             'Bearer ' + access_token;
