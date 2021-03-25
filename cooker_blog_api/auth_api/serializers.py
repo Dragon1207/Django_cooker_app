@@ -26,7 +26,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if not username.isalnum():
             raise serializers.ValidationError(
-                'The last name should only contain alphanumeric characters')
+                'The username should only contain alphanumeric characters')
 
         return attrs
 
