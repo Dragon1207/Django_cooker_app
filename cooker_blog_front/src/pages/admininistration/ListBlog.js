@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import {Button, Container} from "@material-ui/core";
 import {Delete, Edit} from '@material-ui/icons'
 import {Link} from "react-router-dom";
+import axiosInstance from "../../axios";
 
 export default function ListBlog() {
     const [articles, setArticles] = useState([{id: '1', title: 'Article 1'}, {id: '2', title: 'Article 2'}]);
@@ -34,6 +35,10 @@ export default function ListBlog() {
 
     const deleteArticle = (id) => {
          setArticles(articles.filter(article => article.id !== id));
+    }
+
+    const getArticles = () => {
+        axiosInstance()
     }
 
     return (<>
