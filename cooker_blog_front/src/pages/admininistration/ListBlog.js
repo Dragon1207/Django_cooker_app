@@ -38,7 +38,6 @@ export default function ListBlog() {
     }
 
     const getArticles = () => {
-        axiosInstance()
     }
 
     return (<>
