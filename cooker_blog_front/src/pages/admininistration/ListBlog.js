@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,7 +13,14 @@ import {Link} from "react-router-dom";
 import axiosInstance from "../../axios";
 
 export default function ListBlog() {
-    const [articles, setArticles] = useState([{id: '1', title: 'Article 1'}, {id: '2', title: 'Article 2'}]);
+    const [articles, setArticles] = useState([]);
+
+    useEffect( () => {
+        (async function getArticles() {
+            const articlesFromApi = await axiosInstance.get('blog/posts');
+            setArticles(articlesFromApi);
+        })()
+    })
 
     const StyledTableCell = withStyles((theme) => ({
         head: {
@@ -33,11 +40,9 @@ export default function ListBlog() {
         },
     }))(TableRow);
 
-    const deleteArticle = (id) => {
-         setArticles(articles.filter(article => article.id !== id));
-    }
-
-    const getArticles = () => {
+    const deleteArticle = async (id) => {
+        await axiosInstance.delete('blog/posts/' + id);
+        setArticles(articles.filter(article => article.id !== id));
     }
 
     return (<>
