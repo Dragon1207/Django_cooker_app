@@ -1,13 +1,10 @@
 import React, {useState} from "react";
-import {Button, Container, TextField} from "@material-ui/core";
+import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-
-    const handleChange = () => {
-
-    }
+    const [category, setCategory] = useState('');
 
     const handleSubmit = () => {
 
@@ -23,7 +20,8 @@ export default function CreateBlog() {
                     variant="outlined"
                     required
                     fullWidth
-                    onChange={handleChange}
+                    margin="normal"
+                    onChange={(e) => {setTitle(e.target.value)}}
                     value={title}
                 />
                 <TextField
@@ -34,10 +32,22 @@ export default function CreateBlog() {
                     fullWidth
                     multiline
                     rows={10}
-                    margin="normal"
-                    onChange={handleChange}
+                    onChange={(e) => {setContent(e.target.value)}}
                     value={content}
                 />
+                <FormControl variant="outlined" fullWidth margin="normal">
+                    <InputLabel id="demo-simple-select-outlined-label">Catégorie</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={category}
+                        onChange={(e) => {setCategory(e.target.value)}}
+                        label="Catégorie"
+                    >
+                        <MenuItem value="recette">Recette</MenuItem>
+                        <MenuItem value="actu">Actu</MenuItem>
+                    </Select>
+                </FormControl>
                 <Button variant="contained" color="primary" onClick={handleSubmit}>
                     Créer
                 </Button>

@@ -12,7 +12,6 @@ import {Delete, Edit} from '@material-ui/icons'
 import {Link} from "react-router-dom";
 
 export default function ListBlog() {
-
     const [articles, setArticles] = useState([{id: '1', title: 'Article 1'}, {id: '2', title: 'Article 2'}]);
 
     const StyledTableCell = withStyles((theme) => ({
@@ -32,6 +31,10 @@ export default function ListBlog() {
             },
         },
     }))(TableRow);
+
+    const deleteArticle = (id) => {
+         setArticles(articles.filter(article => article.id !== id));
+    }
 
     return (<>
             <Container maxWidth="lg">
@@ -57,7 +60,7 @@ export default function ListBlog() {
                                 </StyledTableCell>
                                 <TableCell align="right">
                                     <Link to={'/admin/blog/' + article.id + '/edit'}><Edit fontSize="large" style={{marginRight: '15px'}} /></Link>
-                                    <Delete color="secondary" fontSize="large" />
+                                    <Delete color="secondary" fontSize="large" onClick={(e) => {e.preventDefault(); deleteArticle(article.id)}} />
                                 </TableCell>
                             </StyledTableRow>
                         ))}
