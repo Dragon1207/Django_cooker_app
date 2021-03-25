@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../axios';
 import { useHistory } from 'react-router-dom';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
@@ -54,15 +54,16 @@ export default function SignIn() {
         e.preventDefault();
         console.log(formData);
 
-        axios.post(`auth/login/`, {
+        axiosInstance.post(`auth/login/`, {
                 email: formData.email,
                 password: formData.password,
             })
             .then((res) => {
-                localStorage.setItem('access_token', res.data.tokens.access);
-                localStorage.setItem('refresh_token', res.data.tokens.refresh);
-                axios.defaults.headers['Authorization'] =
-                    'JWT ' + localStorage.getItem('access_token');
+                localStorage.setItem('access', res.data.access);
+                localStorage.setItem('refresh', res.data.refresh);
+                axiosInstance.defaults.headers['Authorization'] =
+                    'Bearer ' + localStorage.getItem('access_token');
+                console.log(res.data);
                 history.push('/');
             });
     };
