@@ -17,16 +17,26 @@ import CreateBlog from "./pages/admininistration/CreateBlog";
 import BlogListPage from "./pages/blog/List";
 import SingleBlogPage from "./pages/blog/Single";
 import {AppBar, Button, Toolbar} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles";
+import TableCell from "@material-ui/core/TableCell";
 
 function App() {
+  const NavButton = withStyles(() => ({
+    root: {
+      color: "#FFF",
+      "&:hover": {
+        color: "#FFF"
+      }
+    }
+  }))(Button);
   return (
       <Router>
         <AppBar position="static">
           <Toolbar>
-            <Button color="inherit" href="/login">Connexion</Button>
-            <Button color="inherit" href="/">Accueil</Button>
-            <Button color="inherit" href="/posts">Articles</Button>
-            <Button color="inherit" href="/admin/blog">Administration</Button>
+            <NavButton color="inherit" href="/">Accueil</NavButton>
+            <NavButton color="inherit" href="/posts">Articles</NavButton>
+            <NavButton color="inherit" href="/login">Connexion</NavButton>
+            <NavButton color="inherit" href="/admin/blog">Administration</NavButton>
           </Toolbar>
         </AppBar>
 
