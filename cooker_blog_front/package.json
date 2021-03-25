@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "http-proxy-middleware": "^1.0.6",
     "jsonapi-react": "0.0.23",
     "miragejs": "^0.1.41"
   }
