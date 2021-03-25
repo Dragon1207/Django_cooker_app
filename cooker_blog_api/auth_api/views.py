@@ -16,14 +16,16 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.http import HttpResponsePermanentRedirect
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from blog_api.permissions import IsOwnerOrReadOnly
 
 
 class RegisterView(generics.GenericAPIView):
 
     serializer_class = RegisterSerializer
+    # permission_classes = [AllowAny,]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -37,6 +39,7 @@ class RegisterView(generics.GenericAPIView):
 
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    # permission_classes = [AllowAny,]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -48,7 +51,7 @@ class LoginAPIView(generics.GenericAPIView):
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = LogoutSerializer
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = [IsAuthenticated,]
 
     def post(self, request):
 
@@ -62,7 +65,7 @@ class LogoutAPIView(generics.GenericAPIView):
 class UserListAPIView(ListCreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    #permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
 
     # def perform_create(self, serializer):
     #     return serializer.save(owner=self.request.user)
@@ -73,7 +76,7 @@ class UserListAPIView(ListCreateAPIView):
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    #permission_classes = (permissions.IsAuthenticated, IsOwner,)
+    # permission_classes = [IsAdminUser, IsOwnerOrReadOnly,]
     queryset = User.objects.all()
     lookup_field = "id"
 
