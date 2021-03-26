@@ -25,7 +25,7 @@ from blog_api.permissions import IsOwnerOrReadOnly
 class RegisterView(generics.GenericAPIView):
 
     serializer_class = RegisterSerializer
-    # permission_classes = [AllowAny,]
+    permission_classes = [AllowAny,]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -39,7 +39,6 @@ class RegisterView(generics.GenericAPIView):
 
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
-    # permission_classes = [AllowAny,]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -51,7 +50,7 @@ class LoginAPIView(generics.GenericAPIView):
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = LogoutSerializer
 
-    # permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
 
@@ -65,7 +64,7 @@ class LogoutAPIView(generics.GenericAPIView):
 class UserListAPIView(ListCreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    # permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
+    permission_classes = [IsAdminUser]
 
     # def perform_create(self, serializer):
     #     return serializer.save(owner=self.request.user)
@@ -76,7 +75,7 @@ class UserListAPIView(ListCreateAPIView):
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    # permission_classes = [IsAdminUser, IsOwnerOrReadOnly,]
+    permission_classes = [IsAdminUser | IsOwnerOrReadOnly]
     queryset = User.objects.all()
     lookup_field = "id"
 

@@ -44,8 +44,6 @@ class PostSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         ingredient_data = validated_data.pop('ingredient')
-        # import pdb
-        # pdb.set_trace()
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
         instance.published = validated_data.get('published', instance.published)
