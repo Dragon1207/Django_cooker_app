@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 import { useHistory } from 'react-router-dom';
 //MaterialUI
@@ -13,6 +13,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+const access_token = localStorage.getItem('access');
+const refresh_token = localStorage.getItem('refresh');
+const Id_User = localStorage.getItem('id');
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -50,6 +54,26 @@ export default function SignIn() {
         });
     };
 
+    useEffect(() => {
+       if(refresh_token){
+        axiosInstance.post(`auth/token/refresh/`, {
+            refresh: refresh_token,
+        })
+        .then((res) => {
+            if(res.status === 200){
+              localStorage.setItem('access', res.data.access);
+              axiosInstance.defaults.headers['Authorization'] =
+            'Bearer ' + access_token;
+            }else{
+               history.push('/login');
+            }
+               console.log(res);
+        });
+      }else{
+              history.push('/login');   
+      }
+    }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
@@ -59,10 +83,11 @@ export default function SignIn() {
                 password: formData.password,
             })
             .then((res) => {
-                localStorage.setItem('access', res.data.access);
-                localStorage.setItem('refresh', res.data.refresh);
+                localStorage.setItem('access', res.data.tokens.access);
+                localStorage.setItem('refresh', res.data.tokens.refresh);
+                localStorage.setItem('Id_User', res.data.id);
                 axiosInstance.defaults.headers['Authorization'] =
-                    'Bearer ' + localStorage.getItem('access_token');
+                    'Bearer ' + access_token;
                 console.log(res.data);
                 history.push('/');
             });

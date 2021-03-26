@@ -30,9 +30,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validate_data)
 
 
-
-
-
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, min_length=3)
     password = serializers.CharField(
@@ -58,7 +55,6 @@ class LoginSerializer(serializers.ModelSerializer):
         password = attrs.get('password', '')
         filtered_user_by_email = User.objects.filter(email=email)
         user = auth.authenticate(email=email, password=password)
-        # get_user = User.objects.get(email=email)
 
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
@@ -70,6 +66,7 @@ class LoginSerializer(serializers.ModelSerializer):
             'username': user.username,
             'email': user.email,
             'tokens': user.tokens
+
         }
 
         return super().validate(attrs)
