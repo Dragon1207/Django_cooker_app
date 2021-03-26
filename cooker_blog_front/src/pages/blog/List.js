@@ -11,11 +11,11 @@ const BlogListPage = () => {
   useEffect(() => {
     axiosInstance.get('blog/posts')
     .then(res => {
-      console.log(res);
-      setdata(res.data)
-      console.log(data);
+      console.log(res.data);
+      // setdata(res.data)
+      // console.log(data);
     })
-  }, [])
+  },[])
   
   
 
@@ -68,7 +68,7 @@ const BlogListPage = () => {
 
   return (
     <>
-      <BlogSidebar>
+      <BlogSidebar data={data?.posts}>
         <BlogList data={data?.posts} />
       </BlogSidebar>
     </>
