@@ -1,5 +1,6 @@
 import React from 'react';
-import {  Container, Grid} from '@material-ui/core';
+import { Link } from "react-router-dom";
+import {  Container, Grid, Typography} from '@material-ui/core';
 import Meta from './Meta';
 import Ingredient from './Ingredient';
 
@@ -12,17 +13,15 @@ export default function Post(props) {
   return (
     <>
       <Container maxWidth="lg" style={{marginBottom:'4%'}}>
-        <Grid container spacing={2}>
-          <Grid lg={3} item>
+        <Grid container wrap="nowrap" spacing={2}>
+          <Grid md={3} lg={3} item>
             <Ingredient data={data.ingredient}/>
           </Grid>
-          <Grid item lg={9} sm container>
-            <Grid item xs container zeroMinWidth direction="column" spacing={2}>
-              <a href={data.link}><h3>{data.title}</h3></a>
-              <p>{data.content}...<a href={data.link}>Lire plus</a></p>
-              <Meta data={meta}/>
+          <Grid item lg={9} sm zeroMinWidth>
+          <Link to={'/post/'+ data.id}><h3>{data.title}</h3></Link>
+          <Typography noWrap>{data.content}</Typography><Link to={'/post/'+ data.id}>Lire plus</Link>
+            <Meta data={meta}/>
             </Grid>
-          </Grid>
         </Grid>
       </Container>
     </>

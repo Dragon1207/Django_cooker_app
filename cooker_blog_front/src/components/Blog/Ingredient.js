@@ -7,7 +7,7 @@ export default function Ingredient(props) {
       <div className="ingredient">
         <h5>Ingredients</h5>
         <ul className="tags">
-          {data.map((ingredient, i) => (
+          {data?.map((ingredient, i) => (
             <li key={i}>{ingredient.name}</li>
           ))}
         </ul>
