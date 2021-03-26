@@ -1,20 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import BlogList from '../../components/Blog/List';
 import BlogSidebar from '../../layout/BlogSidebar';
-import axios from '../../axios.js';
+import axiosInstance from '../../axios.js';
 
 
 
 const BlogListPage = () => {
-  //const posts = () => {
-    axios.get('blog/posts').then(res => {
-      console.log(res);
-    })
-  //}
+  const [data, setdata] = useState([]);
 
+  useEffect(() => {
+    axiosInstance.get('blog/posts')
+    .then(res => {
+      console.log(res);
+      setdata(res.data)
+      console.log(data);
+    })
+  }, [])
+  
   
 
-  const data={
+  /*const data={
     posts: [
       {
         ingredient: [
@@ -57,14 +62,14 @@ const BlogListPage = () => {
         link: 'link'
       }
     ]
-  }
+  }*/
   //const { data, error, isLoading } = useQuery('posts');
   //console.log(useQuery('posts'));
 
   return (
     <>
       <BlogSidebar>
-        <BlogList data={data.posts} />
+        <BlogList data={data?.posts} />
       </BlogSidebar>
     </>
   );

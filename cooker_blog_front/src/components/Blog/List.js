@@ -10,7 +10,7 @@ const { data, error } = props;
     <>
       <Container maxWidth="lg">
         <Paper>
-          {data.map((post, i) => (
+          {data?.map((post, i) => (
             <Post data= {post} key={i}/>
           ))}
         </Paper>
