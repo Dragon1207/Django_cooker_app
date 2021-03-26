@@ -16,6 +16,7 @@ import Container from '@material-ui/core/Container';
 
 const access_token = localStorage.getItem('access');
 const refresh_token = localStorage.getItem('refresh');
+const Id_User = localStorage.getItem('id');
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -84,6 +85,7 @@ export default function SignIn() {
             .then((res) => {
                 localStorage.setItem('access', res.data.tokens.access);
                 localStorage.setItem('refresh', res.data.tokens.refresh);
+                localStorage.setItem('Id_User', res.data.id);
                 axiosInstance.defaults.headers['Authorization'] =
                     'Bearer ' + access_token;
                 console.log(res.data);
