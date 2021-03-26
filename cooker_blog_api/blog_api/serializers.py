@@ -8,9 +8,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ['id', 'name']
         read_only_fields = ["id"]
-        extra_kwargs = {
-            'name': {'validators': []}, # remove uniqueness validation
-        }
+
 
 
 
@@ -19,7 +17,10 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'content', 'published', 'status', 'ingredient', 'author']
-        read_only_fields = ("id",)
+        read_only_fields = ("id","author")
+
+    def pre_save(self, obj):
+        obj.author = self.request.user
 
     def get_or_create_ingredients(self, ingredient_data):
         list_ingredient = []

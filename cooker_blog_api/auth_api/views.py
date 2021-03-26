@@ -19,13 +19,16 @@ from django.http import HttpResponsePermanentRedirect
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from blog_api.permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsOwner
+from .renderers import UserRenderer
+
 
 
 class RegisterView(generics.GenericAPIView):
 
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny,]
+    renderer_classes = (UserRenderer,)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -39,6 +42,7 @@ class RegisterView(generics.GenericAPIView):
 
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    renderer_classes = (UserRenderer,)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -65,6 +69,7 @@ class UserListAPIView(ListCreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
+    renderer_classes = (UserRenderer,)
 
     # def perform_create(self, serializer):
     #     return serializer.save(owner=self.request.user)
@@ -75,9 +80,19 @@ class UserListAPIView(ListCreateAPIView):
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAdminUser | IsOwnerOrReadOnly]
+    permission_classes = [IsAdminUser | IsOwner]
+    renderer_classes = (UserRenderer,)
     queryset = User.objects.all()
     lookup_field = "id"
 
-    # def get_queryset(self):
-    #     return self.queryset.filter(owner=self.request.user)
+    def perform_update(self, serializer):
+        if not self.request.user.is_staff == True:
+            return serializer.save(id=self.request.user.id)
+
+    def perform_destroy(self, serializer):
+        if not self.request.user.is_staff == True:
+            return serializer.save(id=self.request.user.id)
+
+    def get_queryset(self):
+        if not self.request.user.is_staff == True:
+            return self.queryset.filter(id=self.request.user.id)

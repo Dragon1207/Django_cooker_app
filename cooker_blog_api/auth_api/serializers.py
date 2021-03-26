@@ -66,7 +66,6 @@ class LoginSerializer(serializers.ModelSerializer):
             'username': user.username,
             'email': user.email,
             'tokens': user.tokens
-
         }
 
         return super().validate(attrs)
@@ -98,3 +97,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','username', 'email', 'first_name', 'last_name', 'is_staff', ]
+        read_only_fields = ['id', 'is_staff']
