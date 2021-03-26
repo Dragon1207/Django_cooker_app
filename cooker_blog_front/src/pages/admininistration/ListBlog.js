@@ -58,6 +58,7 @@ export default function ListBlog() {
                     <TableHead>
                         <StyledTableRow>
                             <StyledTableCell>Titre de l'article</StyledTableCell>
+                            <StyledTableCell>Status</StyledTableCell>
                             <StyledTableCell align="right">Actions</StyledTableCell>
                         </StyledTableRow>
                     </TableHead>
@@ -66,6 +67,9 @@ export default function ListBlog() {
                             <StyledTableRow key={article.title}>
                                 <StyledTableCell component="th" scope="row">
                                     {article.title}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" scope="row">
+                                    {article.status}
                                 </StyledTableCell>
                                 <TableCell align="right">
                                     <Link to={'/admin/blog/' + article.id + '/edit'}><Edit fontSize="large" style={{marginRight: '15px'}} /></Link>

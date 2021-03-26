@@ -1,13 +1,43 @@
 import React, {useState} from "react";
 import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import axiosInstance from "../../axios";
+import { useParams } from "react-router-dom";
+
 
 export default function EditBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [ingredients, setIngredients] = useState([]);
+    const [status, setStatus] = useState('draft');
+    const [errors, setErrors] = useState({title: false, content: false});
+
+    let { id } = useParams();
 
     const handleSubmit = () => {
-        console.log(title)
+        if(!title) {
+            setErrors(prevState => ({
+                ...prevState,
+                title: 'Titre requis'
+            }));
+        }
+
+        if(!content) {
+            setErrors(prevState => ({
+                ...prevState,
+                content: 'Contenu requis'
+            }));
+        }
+
+        axiosInstance.patch('blog/posts/' + id, {
+            title: title,
+            content: content,
+            status: status,
+            author: 1
+        }).then((result) => {
+            console.log(result);
+        }).catch((e) => {
+
+        })
     }
 
     return (
@@ -18,6 +48,8 @@ export default function EditBlog() {
                     id="outlined-basic"
                     label="Titre"
                     variant="outlined"
+                    error={errors.title}
+                    helperText={errors.title}
                     required
                     fullWidth
                     margin="normal"
@@ -28,6 +60,8 @@ export default function EditBlog() {
                     id="outlined-textarea"
                     label="Contenu"
                     variant="outlined"
+                    error={errors.content}
+                    helperText={errors.content}
                     required
                     fullWidth
                     multiline
@@ -47,6 +81,19 @@ export default function EditBlog() {
                     >
                         <MenuItem value="1">Ingrédient 1</MenuItem>
                         <MenuItem value="2">Ingrédient 2</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl variant="outlined" fullWidth margin="normal">
+                    <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={status}
+                        onChange={(e) => {setStatus(e.target.value)}}
+                        label="Status"
+                    >
+                        <MenuItem value="published">Publié</MenuItem>
+                        <MenuItem value="draft">Brouillon</MenuItem>
                     </Select>
                 </FormControl>
                 <Button variant="contained" color="primary" onClick={handleSubmit}>

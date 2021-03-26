@@ -6,33 +6,46 @@ export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [ingredients, setIngredients] = useState([]);
+    const [status, setStatus] = useState('draft');
+    const [errors, setErrors] = useState({title: false, content: false});
 
     const handleSubmit = () => {
-        var pad = function(num) { return ('00'+num).slice(-2) };
-        var date;
-        date = new Date();
-        date = date.getUTCFullYear()         + '-' +
-            pad(date.getUTCMonth() + 1)  + '-' +
-            pad(date.getUTCDate())       + ' ' +
-            pad(date.getUTCHours())      + ':' +
-            pad(date.getUTCMinutes())    + ':' +
-            pad(date.getUTCSeconds());
-        axiosInstance.post('blog/posts', {
+        if(!title) {
+            setErrors(prevState => ({
+                ...prevState,
+                title: 'Titre requis'
+            }));
+        }
+
+        if(!content) {
+            setErrors(prevState => ({
+                ...prevState,
+                content: 'Contenu requis'
+            }));
+        }
+
+        axiosInstance.post('blog/posts/', {
             title: title,
             content: content,
-            published: date,
+            status: status,
             author: 1
+        }).then((result) => {
+            console.log(result);
+        }).catch((e) => {
+
         })
     }
 
     return (
         <Container maxWidth="lg">
             <h1>Créer un article</h1>
-            <form noValidate>
+            <form>
                 <TextField
                     id="outlined-basic"
                     label="Titre"
                     variant="outlined"
+                    error={errors.title}
+                    helperText={errors.title}
                     required
                     fullWidth
                     margin="normal"
@@ -43,6 +56,8 @@ export default function CreateBlog() {
                     id="outlined-textarea"
                     label="Contenu"
                     variant="outlined"
+                    error={errors.content}
+                    helperText={errors.content}
                     required
                     fullWidth
                     multiline
@@ -62,6 +77,19 @@ export default function CreateBlog() {
                     >
                         <MenuItem value="1">Ingrédient 1</MenuItem>
                         <MenuItem value="2">Ingrédient 2</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl variant="outlined" fullWidth margin="normal">
+                    <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={status}
+                        onChange={(e) => {setStatus(e.target.value)}}
+                        label="Status"
+                    >
+                        <MenuItem value="published">Publié</MenuItem>
+                        <MenuItem value="draft">Brouillon</MenuItem>
                     </Select>
                 </FormControl>
                 <Button variant="contained" color="primary" onClick={handleSubmit}>
