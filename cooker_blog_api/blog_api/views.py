@@ -26,7 +26,6 @@ class PostListAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
@@ -42,3 +41,4 @@ class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     # def get_queryset(self):
     #     return self.queryset.filter(author=self.request.user.id)
+

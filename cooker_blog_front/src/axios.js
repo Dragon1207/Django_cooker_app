@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://127.0.0.1:8000/api/';
+const baseURL = 'http://localhost:8000/api/';
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -10,9 +10,8 @@ const axiosInstance = axios.create({
             ? 'Bearer ' + localStorage.getItem('access')
             : null,
         'Content-Type': 'application/json',
-        accept: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    },
+        accept: 'application/json'
+        },
 });
 
 export default axiosInstance;

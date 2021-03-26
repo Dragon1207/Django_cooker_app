@@ -1,38 +1,67 @@
 import React, {useState} from "react";
 import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../axios";
+import {useHistory} from "react-router-dom";
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [ingredients, setIngredients] = useState([]);
+    const [status, setStatus] = useState('draft');
+    const [errors, setErrors] = useState({});
+
+    let history = useHistory();
 
     const handleSubmit = () => {
-        var pad = function(num) { return ('00'+num).slice(-2) };
-        var date;
-        date = new Date();
-        date = date.getUTCFullYear()         + '-' +
-            pad(date.getUTCMonth() + 1)  + '-' +
-            pad(date.getUTCDate())       + ' ' +
-            pad(date.getUTCHours())      + ':' +
-            pad(date.getUTCMinutes())    + ':' +
-            pad(date.getUTCSeconds());
-        axiosInstance.post('blog/posts', {
+        setErrors({});
+        if(!title) {
+            setErrors(prevState => ({
+                ...prevState,
+                title: 'Titre requis'
+            }));
+            return;
+        }
+
+        if(!content) {
+            setErrors(prevState => ({
+                ...prevState,
+                content: 'Contenu requis'
+            }));
+            return;
+        }
+
+        axiosInstance.post('blog/posts/', {
             title: title,
             content: content,
-            published: date,
-            author: 1
+            status: status,
+            author: localStorage.getItem('Id_User'),
+            ingredient: ingredients
+        }).then((res) => {
+            history.push('/admin/blog', {success: 'Post créé avec succès.'});
+        }).catch((e) => {
+            setErrors(prevState => ({
+                ...prevState,
+                global: 'Une erreur est survenue.'
+            }));
         })
     }
 
     return (
         <Container maxWidth="lg">
-            <h1>Créer un article</h1>
-            <form noValidate>
+            <h1>Créer un post</h1>
+            {errors.global &&
+            <Alert severity="error" style={{marginBottom: '20px'}}>
+                {errors.global}
+            </Alert>
+            }
+            <form>
                 <TextField
                     id="outlined-basic"
                     label="Titre"
                     variant="outlined"
+                    error={errors.title ? true : false}
+                    helperText={errors.title}
                     required
                     fullWidth
                     margin="normal"
@@ -43,6 +72,8 @@ export default function CreateBlog() {
                     id="outlined-textarea"
                     label="Contenu"
                     variant="outlined"
+                    error={errors.title ? true : false}
+                    helperText={errors.content}
                     required
                     fullWidth
                     multiline
@@ -62,6 +93,19 @@ export default function CreateBlog() {
                     >
                         <MenuItem value="1">Ingrédient 1</MenuItem>
                         <MenuItem value="2">Ingrédient 2</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl variant="outlined" fullWidth margin="normal">
+                    <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={status}
+                        onChange={(e) => {setStatus(e.target.value)}}
+                        label="Status"
+                    >
+                        <MenuItem value="published">Publié</MenuItem>
+                        <MenuItem value="draft">Brouillon</MenuItem>
                     </Select>
                 </FormControl>
                 <Button variant="contained" color="primary" onClick={handleSubmit}>

@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container';
 
 const access_token = localStorage.getItem('access');
 const refresh_token = localStorage.getItem('refresh');
-const Id_User = localStorage.getItem('id');
+const Id_User = localStorage.getItem('Id_User');
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -78,7 +78,7 @@ export default function SignUp() {
  
      const handleSubmit = (e) => {
          e.preventDefault();
-         console.log(formData);
+        //  console.log(formData);
  
          axiosInstance.post(`auth/register/`, {
                  email: formData.email,
@@ -95,10 +95,12 @@ export default function SignUp() {
                     localStorage.setItem('access', res.data.tokens.access);
                     localStorage.setItem('refresh', res.data.tokens.refresh);
                     localStorage.setItem('Id_User', res.data.id);
+                    localStorage.setItem('is_staff', res.data.is_staff);
                     axiosInstance.defaults.headers['Authorization'] =
                         'Bearer ' + access_token;
-                    console.log(res.data);
-                    history.push('/');
+                    // console.log(res.data);
+                    // history.push('/');
+                    window.location.href= '/';
                 });
 
                 //  localStorage.setItem('access', res.data.tokens.access);

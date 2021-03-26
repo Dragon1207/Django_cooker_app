@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container';
 
 const access_token = localStorage.getItem('access');
 const refresh_token = localStorage.getItem('refresh');
-const Id_User = localStorage.getItem('id');
+const Id_User = localStorage.getItem('Id_User');
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -76,7 +76,7 @@ export default function SignIn() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
+        // console.log(formData);
 
         axiosInstance.post(`auth/login/`, {
                 email: formData.email,
@@ -86,10 +86,12 @@ export default function SignIn() {
                 localStorage.setItem('access', res.data.tokens.access);
                 localStorage.setItem('refresh', res.data.tokens.refresh);
                 localStorage.setItem('Id_User', res.data.id);
+                localStorage.setItem('is_staff', res.data.is_staff);
                 axiosInstance.defaults.headers['Authorization'] =
                     'Bearer ' + access_token;
-                console.log(res.data);
-                history.push('/');
+                // console.log(res.data);
+                // history.push('/');
+                window.location.href= '/';
             });
     };
 
@@ -101,7 +103,7 @@ export default function SignIn() {
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}></Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Sign in {Id_User}
 				</Typography>
                 <form className={classes.form} noValidate>
                     <TextField
