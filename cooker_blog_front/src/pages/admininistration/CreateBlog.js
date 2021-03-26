@@ -3,11 +3,12 @@ import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField}
 import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../axios";
 import {useHistory} from "react-router-dom";
+import Creatable from "react-select/creatable/dist/react-select.esm";
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [ingredients, setIngredients] = useState([]);
+    const [ingredients, setIngredients] = useState([{label: "Tomate", value: "tomate"}]);
     const [status, setStatus] = useState('draft');
     const [errors, setErrors] = useState({});
 
@@ -38,7 +39,7 @@ export default function CreateBlog() {
             author: localStorage.getItem('Id_User'),
             ingredient: ingredients
         }).then((res) => {
-            history.push('/admin/blog', {success: 'Post créé avec succès.'});
+            history.push('/admin/blog', {success: 'Poste créé avec succès.'});
         }).catch((e) => {
             setErrors(prevState => ({
                 ...prevState,
@@ -49,7 +50,7 @@ export default function CreateBlog() {
 
     return (
         <Container maxWidth="lg">
-            <h1>Créer un post</h1>
+            <h1>Créer un poste</h1>
             {errors.global &&
             <Alert severity="error" style={{marginBottom: '20px'}}>
                 {errors.global}
@@ -81,20 +82,13 @@ export default function CreateBlog() {
                     onChange={(e) => {setContent(e.target.value)}}
                     value={content}
                 />
-                <FormControl variant="outlined" fullWidth margin="normal">
-                    <InputLabel id="demo-simple-select-outlined-label">Ingrédients</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={ingredients}
-                        multiple
-                        onChange={(e) => {setIngredients(e.target.value)}}
-                        label="Ingrédients"
-                    >
-                        <MenuItem value="1">Ingrédient 1</MenuItem>
-                        <MenuItem value="2">Ingrédient 2</MenuItem>
-                    </Select>
-                </FormControl>
+                <Creatable
+                    isMulti
+                    onChange={(value, actionMeta) => {
+                        console.log(value);
+                    }}
+                    options={ingredients}
+                />
                 <FormControl variant="outlined" fullWidth margin="normal">
                     <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
                     <Select
