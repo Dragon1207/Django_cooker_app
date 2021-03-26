@@ -17,6 +17,7 @@ import CreateBlog from "./pages/admininistration/CreateBlog";
 import BlogListPage from "./pages/blog/List";
 import SingleBlogPage from "./pages/blog/Single";
 import {AppBar, Button, Toolbar} from "@material-ui/core";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -50,15 +51,9 @@ function App() {
             <Route path="/forgotpassword">
               <ForgotPassword />
             </Route>
-            <Route exact path="/admin/blog">
-              <ListBlog />
-            </Route>
-            <Route path="/admin/blog/:id/edit">
-              <EditBlog />
-            </Route>
-            <Route path="/admin/blog/create">
-              <CreateBlog />
-            </Route>
+            <PrivateRoute exact path="/admin/blog" component={ListBlog} />
+            <PrivateRoute path="/admin/blog/:id/edit" component={EditBlog} />
+            <PrivateRoute path="/admin/blog/create" component={CreateBlog} />
           </Switch>
       </Router>
   );
