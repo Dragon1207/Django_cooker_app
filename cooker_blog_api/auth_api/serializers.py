@@ -55,8 +55,6 @@ class LoginSerializer(serializers.ModelSerializer):
         password = attrs.get('password', '')
         filtered_user_by_email = User.objects.filter(email=email)
         user = auth.authenticate(email=email, password=password)
-        get_user = User.objects.get(email=email)
-        username = get_user.username
 
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
@@ -64,10 +62,11 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed('Account disabled, contact admin')
 
         return {
-            'id': get_user.id,
-            'username': get_user.username,
-            'email': get_user.email,
-            'tokens': get_user.tokens
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'tokens': user.tokens
+
         }
 
         return super().validate(attrs)
@@ -98,4 +97,4 @@ class LogoutSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'email', 'first_name', 'last_name']
+        fields = ['id','username', 'email', 'first_name', 'last_name', 'is_staff', ]

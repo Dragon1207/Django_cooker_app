@@ -19,7 +19,7 @@ class Post(models.Model):
         def get_queryset(self):
             return super().get_queryset().filter(status='published')
 
-    options = (
+    OPTIONS = (
         ('draft', 'Draft'),
         ('published', 'Published'),
     )
@@ -31,7 +31,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts')
     status = models.CharField(
-        max_length=10, choices=options, default='published')
+        max_length=10, choices=OPTIONS, default='published')
     objects = models.Manager()  # default manager
     postobjects = PostObjects()  # custom manager
 
