@@ -1,9 +1,19 @@
 import React from 'react';
 import BlogList from '../../components/Blog/List';
 import BlogSidebar from '../../layout/BlogSidebar';
-//import { useQuery } from 'jsonapi-react';
+import axios from '../../axios.js';
+
+
 
 const BlogListPage = () => {
+  //const posts = () => {
+    axios.get('blog/posts').then(res => {
+      console.log(res);
+    })
+  //}
+
+  
+
   const data={
     posts: [
       {
