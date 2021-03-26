@@ -38,15 +38,23 @@ export default function CreateBlog() {
             author: localStorage.getItem('Id_User'),
             ingredient: ingredients
         }).then((res) => {
-            history.push('/admin/blog', {succees: 'Post créé avec succès.'});
+            history.push('/admin/blog', {success: 'Post créé avec succès.'});
         }).catch((e) => {
-            console.log(e)
+            setErrors(prevState => ({
+                ...prevState,
+                global: 'Une erreur est survenue.'
+            }));
         })
     }
 
     return (
         <Container maxWidth="lg">
             <h1>Créer un post</h1>
+            {errors.global &&
+            <Alert severity="error" style={{marginBottom: '20px'}}>
+                {errors.global}
+            </Alert>
+            }
             <form>
                 <TextField
                     id="outlined-basic"
