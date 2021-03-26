@@ -10,9 +10,8 @@ const axiosInstance = axios.create({
             ? 'Bearer ' + localStorage.getItem('access')
             : null,
         'Content-Type': 'application/json',
-        accept: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    },
+        accept: 'application/json'
+        },
 });
 
 export default axiosInstance;

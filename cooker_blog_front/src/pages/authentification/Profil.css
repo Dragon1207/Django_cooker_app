@@ -1,0 +1,14 @@
+.Profil {
+    margin-top: 30px;
+}
+
+.userImage {
+    width: 250px;
+    border-radius: 200px;
+}
+
+.userName {
+    font-size: 30px;
+    margin-top: 10px;
+    color: black;
+}
