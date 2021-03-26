@@ -40,10 +40,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
     const history = useHistory();
     const initialFormData = Object.freeze({
-        first_name: '',
-        last_name: '',
         email: '',
-        phone: '',
+        username: '',
         password: '',
     });
 
@@ -59,7 +57,7 @@ export default function SignUp() {
 
     useEffect(() => {
         if(refresh_token){
-            axiosInstance.post(`auth/token/refresh/`, {
+         axiosInstance.post(`auth/token/refresh/`, {
              refresh: refresh_token,
          })
          .then((res) => {
@@ -76,29 +74,39 @@ export default function SignUp() {
                history.push('/login');   
        }
      }, [])
+ 
+     const handleSubmit = (e) => {
+         e.preventDefault();
+         console.log(formData);
+ 
+         axiosInstance.post(`auth/register/`, {
+                 email: formData.email,
+                 username: formData.username,
+                 password: formData.password,
+             })
+             .then((res) => {
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+                axiosInstance.post(`auth/login/`, {
+                    email: formData.email,
+                    password: formData.password,
+                })
+                .then((res) => {
+                    localStorage.setItem('access', res.data.tokens.access);
+                    localStorage.setItem('refresh', res.data.tokens.refresh);
+                    axiosInstance.defaults.headers['Authorization'] =
+                        'Bearer ' + access_token;
+                    console.log(res.data);
+                    history.push('/');
+                });
 
-        // axios.post(`auth/register/`, formData,  { headers: {
-        //     'Content-Type': 'application/json'
-        // }})
-        //     .then((res) => {
-        //         history.push('login/');
-        //         console.log(res);
-        //         console.log(res.data);
-        //     });
-        
-        axiosInstance.post('auth/register/', formData)
-            .then(response => { 
-                history.push('login/');
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error.response)
-            });
-    };
+                //  localStorage.setItem('access', res.data.tokens.access);
+                //  localStorage.setItem('refresh', res.data.tokens.refresh);
+                //  axiosInstance.defaults.headers['Authorization'] =
+                //      'Bearer ' + localStorage.getItem('access');
+                //  console.log(res.data);
+                //  history.push('/');
+             });
+     };
 
     const classes = useStyles();
 
@@ -117,30 +125,6 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="first_name"
-                                label="First Name"
-                                name="first_name"
-                                autoComplete="first_name"
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="last_name"
-                                label="Last Name"
-                                name="last_name"
-                                autoComplete="last_name"
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
                                 id="email"
                                 label="Email Address"
                                 name="email"
@@ -153,10 +137,10 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="phone"
-                                label="Phone Number"
-                                name="phone"
-                                autoComplete="phone"
+                                id="username"
+                                label="Username"
+                                name="username"
+                                autoComplete="username"
                                 onChange={handleChange}
                             />
                         </Grid>

@@ -59,11 +59,7 @@ export default function SignIn() {
             refresh: refresh_token,
         })
         .then((res) => {
-<<<<<<< Updated upstream
-            if(res.status == 200){
-=======
             if(res.status === 200){
->>>>>>> Stashed changes
               localStorage.setItem('access', res.data.access);
               axiosInstance.defaults.headers['Authorization'] =
             'Bearer ' + access_token;
@@ -89,7 +85,7 @@ export default function SignIn() {
                 localStorage.setItem('access', res.data.tokens.access);
                 localStorage.setItem('refresh', res.data.tokens.refresh);
                 axiosInstance.defaults.headers['Authorization'] =
-                    'Bearer ' + localStorage.getItem('access');
+                    'Bearer ' + access_token;
                 console.log(res.data);
                 history.push('/');
             });
