@@ -9,18 +9,22 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Button, Container} from "@material-ui/core";
 import {Delete, Edit} from '@material-ui/icons'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import axiosInstance from "../../axios";
+import Alert from "@material-ui/lab/Alert";
 
 export default function ListBlog() {
-    const [articles, setArticles] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const location = useLocation();
 
     useEffect( () => {
-        (async function getArticles() {
-            const articlesFromApi = await axiosInstance.get('blog/posts');
-            setArticles(articlesFromApi);
+        (async function getPosts() {
+            const res = await axiosInstance.get('blog/posts/');
+            if(res.status === 200) {
+                setPosts(res.data);
+            }
         })()
-    })
+    }, [])
 
     const StyledTableCell = withStyles((theme) => ({
         head: {
@@ -40,40 +44,45 @@ export default function ListBlog() {
         },
     }))(TableRow);
 
-    const deleteArticle = async (id) => {
-        await axiosInstance.delete('blog/posts/' + id);
-        setArticles(articles.filter(article => article.id !== id));
+    const deletePost = async (id) => {
+        await axiosInstance.delete('blog/posts/' + id + '/');
+        setPosts(posts.filter(post => post.id !== id));
     }
 
     return (<>
             <Container maxWidth="lg">
-            <h1>Administrer les articles</h1>
+            <h1>Administrer les posts</h1>
             <Link to="/admin/blog/create">
                 <Button variant="contained" color="primary" style={{marginBottom: '20px'}}>
                     Créer un article
                 </Button>
             </Link>
+            {location.state !== undefined && location.state.success &&
+                <Alert severity="success" style={{marginBottom: '20px'}}>
+                    {location.state.success}
+                </Alert>
+            }
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>
                         <StyledTableRow>
-                            <StyledTableCell>Titre de l'article</StyledTableCell>
+                            <StyledTableCell>Titre</StyledTableCell>
                             <StyledTableCell>Status</StyledTableCell>
                             <StyledTableCell align="right">Actions</StyledTableCell>
                         </StyledTableRow>
                     </TableHead>
                     <TableBody>
-                        {articles.map((article) => (
-                            <StyledTableRow key={article.title}>
+                        {posts.map((post) => (
+                            <StyledTableRow key={post.title}>
                                 <StyledTableCell component="th" scope="row">
-                                    {article.title}
+                                    {post.title}
                                 </StyledTableCell>
                                 <StyledTableCell component="th" scope="row">
-                                    {article.status}
+                                    {post.status}
                                 </StyledTableCell>
                                 <TableCell align="right">
-                                    <Link to={'/admin/blog/' + article.id + '/edit'}><Edit fontSize="large" style={{marginRight: '15px'}} /></Link>
-                                    <Delete color="secondary" fontSize="large" onClick={(e) => {e.preventDefault(); deleteArticle(article.id)}} />
+                                    <Link to={'/admin/blog/' + post.id + '/edit'}><Edit fontSize="large" style={{marginRight: '15px'}} /></Link>
+                                    <Delete color="secondary" cursor="pointer" fontSize="large" onClick={(e) => {e.preventDefault(); deletePost(post.id)}} />
                                 </TableCell>
                             </StyledTableRow>
                         ))}

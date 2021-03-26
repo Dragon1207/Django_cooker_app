@@ -1,20 +1,26 @@
 import React, {useState} from "react";
 import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../axios";
+import {useHistory} from "react-router-dom";
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [ingredients, setIngredients] = useState([]);
     const [status, setStatus] = useState('draft');
-    const [errors, setErrors] = useState({title: false, content: false});
+    const [errors, setErrors] = useState({});
+
+    let history = useHistory();
 
     const handleSubmit = () => {
+        setErrors({});
         if(!title) {
             setErrors(prevState => ({
                 ...prevState,
                 title: 'Titre requis'
             }));
+            return;
         }
 
         if(!content) {
@@ -22,29 +28,31 @@ export default function CreateBlog() {
                 ...prevState,
                 content: 'Contenu requis'
             }));
+            return;
         }
 
         axiosInstance.post('blog/posts/', {
             title: title,
             content: content,
             status: status,
-            author: 1
-        }).then((result) => {
-            console.log(result);
+            author: localStorage.getItem('Id_User'),
+            ingredient: ingredients
+        }).then((res) => {
+            history.push('/admin/blog', {succees: 'Post créé avec succès.'});
         }).catch((e) => {
-
+            console.log(e)
         })
     }
 
     return (
         <Container maxWidth="lg">
-            <h1>Créer un article</h1>
+            <h1>Créer un post</h1>
             <form>
                 <TextField
                     id="outlined-basic"
                     label="Titre"
                     variant="outlined"
-                    error={errors.title}
+                    error={errors.title ? true : false}
                     helperText={errors.title}
                     required
                     fullWidth
@@ -56,7 +64,7 @@ export default function CreateBlog() {
                     id="outlined-textarea"
                     label="Contenu"
                     variant="outlined"
-                    error={errors.content}
+                    error={errors.title ? true : false}
                     helperText={errors.content}
                     required
                     fullWidth

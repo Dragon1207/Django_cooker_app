@@ -1,8 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import axiosInstance from "../../axios";
-import { useParams } from "react-router-dom";
-
+import {useHistory, useParams} from "react-router-dom";
 
 export default function EditBlog() {
     const [title, setTitle] = useState('');
@@ -11,14 +10,29 @@ export default function EditBlog() {
     const [status, setStatus] = useState('draft');
     const [errors, setErrors] = useState({title: false, content: false});
 
+    let history = useHistory();
     let { id } = useParams();
 
+    useEffect( () => {
+        (async function getPost() {
+            const res = await axiosInstance.get('blog/posts/' + id + '/');
+            if(res.status === 200) {
+                setTitle(res.data.title);
+                setContent(res.data.content);
+                setIngredients(res.data.ingredient);
+                setStatus(res.data.status);
+            }
+        })()
+    }, [])
+
     const handleSubmit = () => {
+        setErrors({title: false, content: false});
         if(!title) {
             setErrors(prevState => ({
                 ...prevState,
                 title: 'Titre requis'
             }));
+            return;
         }
 
         if(!content) {
@@ -26,29 +40,30 @@ export default function EditBlog() {
                 ...prevState,
                 content: 'Contenu requis'
             }));
+            return;
         }
 
-        axiosInstance.patch('blog/posts/' + id, {
+        axiosInstance.patch('blog/posts/' + id + '/', {
             title: title,
             content: content,
             status: status,
-            author: 1
-        }).then((result) => {
-            console.log(result);
+            ingredient: ingredients
+        }).then((res) => {
+            history.push('/admin/blog', {success: 'Post mis à jour avec succès.'});
         }).catch((e) => {
-
+            console.log(e);
         })
     }
 
     return (
         <Container maxWidth="lg">
-            <h1>Modifier l'article</h1>
+            <h1>Modifier le post</h1>
             <form noValidate>
                 <TextField
                     id="outlined-basic"
                     label="Titre"
                     variant="outlined"
-                    error={errors.title}
+                    error={errors.title ? true : false}
                     helperText={errors.title}
                     required
                     fullWidth
@@ -60,7 +75,7 @@ export default function EditBlog() {
                     id="outlined-textarea"
                     label="Contenu"
                     variant="outlined"
-                    error={errors.content}
+                    error={errors.title ? true : false}
                     helperText={errors.content}
                     required
                     fullWidth
