@@ -19,7 +19,7 @@ from django.http import HttpResponsePermanentRedirect
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from blog_api.permissions import IsOwnerOrReadOnly
+#from blog_api.permissions import IsOwnerOrReadOnly
 
 
 class RegisterView(generics.GenericAPIView):
@@ -75,7 +75,7 @@ class UserListAPIView(ListCreateAPIView):
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAdminUser | IsOwnerOrReadOnly]
+    #permission_classes = [IsAdminUser | IsOwnerOrReadOnly]
     queryset = User.objects.all()
     lookup_field = "id"
 

@@ -1,7 +1,7 @@
 from .serializers import IngredientSerializer, PostSerializer
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .models import Post, Ingredient
-from .permissions import IsOwnerOrReadOnly
+#from .permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
 
@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 class PostListAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    #permission_classes = (IsAuthenticatedOrReadOnly)
 
     # def perform_create(self, serializer):
     #     return serializer.save(owner=self.request.Post)
@@ -21,9 +21,14 @@ class PostListAPIView(ListCreateAPIView):
 
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    # permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
+    #permission_classes = (IsOwnerOrReadOnly)
     queryset = Post.objects.all()
     lookup_field = "id"
+
+    # def update(self, request, *args, **kwargs):
+    #     post = self.get_object()
+    #     post.ingredient.clear()
+    #     return super().update(request, *args, **kwargs)
 
 
     # def get_queryset(self):
