@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,10 +10,17 @@ import Paper from '@material-ui/core/Paper';
 import {Button, Container} from "@material-ui/core";
 import {Delete, Edit} from '@material-ui/icons'
 import {Link} from "react-router-dom";
+import axiosInstance from "../../axios";
 
 export default function ListBlog() {
+    const [articles, setArticles] = useState([]);
 
-    const [articles, setArticles] = useState([{id: '1', title: 'Article 1'}, {id: '2', title: 'Article 2'}]);
+    useEffect( () => {
+        (async function getArticles() {
+            const articlesFromApi = await axiosInstance.get('blog/posts');
+            setArticles(articlesFromApi);
+        })()
+    })
 
     const StyledTableCell = withStyles((theme) => ({
         head: {
@@ -32,6 +39,11 @@ export default function ListBlog() {
             },
         },
     }))(TableRow);
+
+    const deleteArticle = async (id) => {
+        await axiosInstance.delete('blog/posts/' + id);
+        setArticles(articles.filter(article => article.id !== id));
+    }
 
     return (<>
         <Container maxWidth="lg">
@@ -57,7 +69,7 @@ export default function ListBlog() {
                                 </StyledTableCell>
                                 <TableCell align="right">
                                     <Link to={'/admin/blog/' + article.id + '/edit'}><Edit fontSize="large" style={{marginRight: '15px'}} /></Link>
-                                    <Delete color="secondary" fontSize="large" />
+                                    <Delete color="secondary" fontSize="large" onClick={(e) => {e.preventDefault(); deleteArticle(article.id)}} />
                                 </TableCell>
                             </StyledTableRow>
                         ))}

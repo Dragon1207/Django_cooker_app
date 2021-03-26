@@ -30,9 +30,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validate_data)
 
 
-
-
-
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, min_length=3)
     password = serializers.CharField(
@@ -50,13 +47,16 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'tokens']
+        fields = ['id', 'email', 'password', 'tokens']
+        read_only_fields = ['id', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
         password = attrs.get('password', '')
         filtered_user_by_email = User.objects.filter(email=email)
         user = auth.authenticate(email=email, password=password)
+        get_user = User.objects.get(email=email)
+        username = get_user.username
 
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
@@ -64,8 +64,10 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed('Account disabled, contact admin')
 
         return {
-            'email': user.email,
-            'tokens': user.tokens
+            'id': get_user.id,
+            'username': get_user.username,
+            'email': get_user.email,
+            'tokens': get_user.tokens
         }
 
         return super().validate(attrs)
