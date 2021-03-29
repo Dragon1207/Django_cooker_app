@@ -28,7 +28,7 @@ class PostListAPIView(ListCreateAPIView):
 
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
+    #permission_classes = [IsAdminUser, IsOwnerOrReadOnly]
     queryset = Post.objects.all()
     lookup_field = "id"
 
