@@ -3,12 +3,12 @@ import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField}
 import axiosInstance from "../../axios";
 import {useHistory, useParams} from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
-import Creatable from "react-select/creatable/dist/react-select.esm";
+import Creatable from "react-select";
 
 export default function EditBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [ingredients, setIngredients] = useState([{label: "Tomate", value: "tomate"}]);
+    const [ingredients, setIngredients] = useState([]);
     const [status, setStatus] = useState('draft');
     const [errors, setErrors] = useState({title: false, content: false});
 
@@ -96,7 +96,11 @@ export default function EditBlog() {
                 <Creatable
                     isMulti
                     onChange={(value, actionMeta) => {
-                        console.log(value);
+                        var newIngredients = [];
+                        value.map((item) => {
+                            newIngredients.push({name: item.label})
+                        })
+                        setIngredients(newIngredients);
                     }}
                     options={ingredients}
                 />
