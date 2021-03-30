@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { Link } from "react-router-dom";
 import { Container, Grid } from '@material-ui/core';
 import axiosInstance from '../axios.js';
 
@@ -32,7 +33,7 @@ export default function BlogSidebar(props) {
 										{data?.map((post, i) => (
 											<div key={i} className="single-post-list d-flex flex-row align-items-center">
 												<div className="details">
-													<a href="blog-single.html"><h6>{post.title}</h6></a>
+                          <Link to={'/post/'+ post.id}><h6>{post.title}</h6></Link>
 													<p>{(new Date(post.published)).toLocaleDateString()}</p>
 												</div>
 											</div>
