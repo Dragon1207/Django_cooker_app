@@ -57,7 +57,6 @@ export default function SignUp() {
     };
 
     useEffect(() => {
-        if(refresh_token){
          axiosInstance.post(`auth/token/refresh/`, {
              refresh: refresh_token,
          })
@@ -71,9 +70,6 @@ export default function SignUp() {
              }
                 console.log(res);
          });
-       }else{
-               history.push('/login');   
-       }
      }, [])
  
      const handleSubmit = (e) => {
@@ -120,7 +116,7 @@ export default function SignUp() {
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}></Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                  Inscription
 				</Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
@@ -142,7 +138,7 @@ export default function SignUp() {
                                 required
                                 fullWidth
                                 id="username"
-                                label="Username"
+                                label="Nom d'utilisateur"
                                 name="username"
                                 autoComplete="username"
                                 onChange={handleChange}
@@ -154,17 +150,11 @@ export default function SignUp() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="Mot de passe"
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
                             />
                         </Grid>
                     </Grid>
@@ -176,12 +166,12 @@ export default function SignUp() {
                         className={classes.submit}
                         onClick={handleSubmit}
                     >
-                        Sign Up
+                        Inscription
 					</Button>
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href="/login" variant="body2">
-                                Already have an account? Sign in
+                            Déja membre ? Connectez-vous
 							</Link>
                         </Grid>
                     </Grid>
