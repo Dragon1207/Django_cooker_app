@@ -139,6 +139,7 @@ function App() {
             renders the first one that matches the current URL. */}
           <Switch>
             <Route exact path="/">
+            <Home />
             </Route>
             <Route path="/posts">
               <BlogListPage/>
@@ -158,9 +159,9 @@ function App() {
             <Route path="/forgotpassword">
               <ForgotPassword />
             </Route>
-            <Route path="/home">
+{/*             <Route path="/home">
               <Home />
-            </Route>
+            </Route> */}
             <PrivateRoute exact path="/admin/blog" component={ListBlog} />
             <PrivateRoute path="/admin/blog/:id/edit" component={EditBlog} />
             <PrivateRoute path="/admin/blog/create" component={CreateBlog} />
