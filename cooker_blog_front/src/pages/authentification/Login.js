@@ -55,7 +55,6 @@ export default function SignIn() {
     };
 
     useEffect(() => {
-       if(refresh_token){
         axiosInstance.post(`auth/token/refresh/`, {
             refresh: refresh_token,
         })
@@ -69,9 +68,6 @@ export default function SignIn() {
             }
                console.log(res);
         });
-      }else{
-              history.push('/login');   
-      }
     }, [])
 
     const handleSubmit = (e) => {
@@ -92,6 +88,9 @@ export default function SignIn() {
                 // console.log(res.data);
                 // history.push('/');
                 window.location.href= '/';
+            })
+            .catch(error => {
+                alert("Email ou mot de passe incorrect")
             });
     };
 
@@ -103,7 +102,7 @@ export default function SignIn() {
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}></Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in {Id_User}
+                    Connexion
 				</Typography>
                 <form className={classes.form} noValidate>
                     <TextField
@@ -124,7 +123,7 @@ export default function SignIn() {
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label="Mot de passe"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -132,7 +131,7 @@ export default function SignIn() {
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        label="Se souvenir de moi"
                     />
                     <Button
                         type="submit"
@@ -142,17 +141,17 @@ export default function SignIn() {
                         className={classes.submit}
                         onClick={handleSubmit}
                     >
-                        Sign In
+                        Connexion
 					</Button>
-                    <Grid container>
-                        <Grid item xs>
+                    <Grid container justify="flex-end">
+                        {/* <Grid item xs>
                             <Link href="/forgotpassword" variant="body2">
                                 Forgot password?
 							</Link>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
                             <Link href="/register" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                                {"Pas encore membre ? Inscription"}
                             </Link>
                         </Grid>
                     </Grid>
