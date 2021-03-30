@@ -114,7 +114,7 @@ const classes = useStyles();
             <div className="menuLeft">
             <Button><Link to="/" style={{color: '#FFF'}}>Accueil</Link></Button>
             <Button><Link to="/posts" style={{color: '#FFF'}}>Articles</Link></Button>
-            {is_staff && <Button><Link to="/admin/blog" style={{color: '#FFF'}}>Administration</Link></Button>}
+            {is_staff=="true" && <Button><Link to="/admin/blog" style={{color: '#FFF'}}>Administration</Link></Button>}
             </div>
             <div className={classes.search}>
             <div className={classes.searchIcon}>
