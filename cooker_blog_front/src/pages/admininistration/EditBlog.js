@@ -3,7 +3,7 @@ import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField}
 import axiosInstance from "../../axios";
 import {useHistory, useParams} from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
-import Creatable from "react-select";
+import Creatable from 'react-select/creatable';
 
 export default function EditBlog() {
     const [title, setTitle] = useState('');
@@ -15,14 +15,23 @@ export default function EditBlog() {
     let history = useHistory();
     let { id } = useParams();
 
+    var ingredientOptions = [];
     useEffect( () => {
         (async function getPost() {
             const res = await axiosInstance.get('blog/posts/' + id + '/');
             if(res.status === 200) {
                 setTitle(res.data.title);
                 setContent(res.data.content);
-                setIngredients(res.data.ingredient);
                 setStatus(res.data.status);
+            }
+        })();
+
+        (async function getIngredientOptions() {
+            const res = await axiosInstance.get('blog/ingredients/');
+            if(res.status === 200) {
+                res.data.map((item) => {
+                    ingredientOptions.push({label: item.name, value: item.id});
+                })
             }
         })()
     }, [])
@@ -62,7 +71,7 @@ export default function EditBlog() {
 
     return (
         <Container maxWidth="lg">
-            <h1>Modifier le poste</h1>
+            <h1>Modifier l'article</h1>
             {errors.global &&
             <Alert severity="error" style={{marginBottom: '20px'}}>
                 {errors.global}
@@ -76,7 +85,6 @@ export default function EditBlog() {
                     helperText={errors.title}
                     required
                     fullWidth
-                    margin="normal"
                     onChange={(e) => {setTitle(e.target.value)}}
                     value={title}
                 />
@@ -90,9 +98,11 @@ export default function EditBlog() {
                     fullWidth
                     multiline
                     rows={10}
+                    margin="normal"
                     onChange={(e) => {setContent(e.target.value)}}
                     value={content}
                 />
+                <label>Ingrédients</label>
                 <Creatable
                     isMulti
                     onChange={(value, actionMeta) => {
@@ -102,7 +112,7 @@ export default function EditBlog() {
                         })
                         setIngredients(newIngredients);
                     }}
-                    options={ingredients}
+                    options={ingredientOptions}
                 />
                 <FormControl variant="outlined" fullWidth margin="normal">
                     <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>

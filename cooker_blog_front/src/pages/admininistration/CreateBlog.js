@@ -20,7 +20,7 @@ export default function CreateBlog() {
             const res = await axiosInstance.get('blog/ingredients/');
             if(res.status === 200) {
                 res.data.map((item) => {
-                    ingredientOptions.push(item.name)
+                    ingredientOptions.push({label: item.name, value: item.id});
                 })
             }
         })()
@@ -61,7 +61,7 @@ export default function CreateBlog() {
 
     return (
         <Container maxWidth="lg">
-            <h1>Créer un poste</h1>
+            <h1>Créer un article</h1>
             {errors.global &&
             <Alert severity="error" style={{marginBottom: '20px'}}>
                 {errors.global}
@@ -76,7 +76,6 @@ export default function CreateBlog() {
                     helperText={errors.title}
                     required
                     fullWidth
-                    margin="normal"
                     onChange={(e) => {setTitle(e.target.value)}}
                     value={title}
                 />
@@ -90,9 +89,11 @@ export default function CreateBlog() {
                     fullWidth
                     multiline
                     rows={10}
+                    margin="normal"
                     onChange={(e) => {setContent(e.target.value)}}
                     value={content}
                 />
+                <label>Ingrédients</label>
                 <Creatable
                     isMulti
                     onChange={(value, actionMeta) => {
