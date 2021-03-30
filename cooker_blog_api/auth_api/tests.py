@@ -16,7 +16,17 @@ class TestSetUp(APITestCase):
         self.refresh_token_url = reverse('token_refresh')
         self.fake = Faker()
 
-        self.user_data = {
+        self.user1_data = {
+            'email': self.fake.email(),
+            'username': self.fake.name(),
+            'password': self.fake.password(),
+        }
+        self.user2_data = {
+            'email': self.fake.email(),
+            'username': self.fake.name(),
+            'password': self.fake.password(),
+        }
+        self.admin_user_data = {
             'email': self.fake.email(),
             'username': self.fake.name(),
             'password': self.fake.password(),
@@ -32,60 +42,55 @@ class TestSetUp(APITestCase):
 class TestUserViews(TestSetUp):
 
     def test_get_user_list(self):
-        password = 'mypassword'
-        username='myuser'
-        email='myemail@test.com'
-        my_admin = User.objects.create_superuser(username=username, email=email, password=password)
+        my_admin = User.objects.create_superuser(username=self.admin_user_data['username'], email=self.admin_user_data['email'], password=self.admin_user_data['password'])
         login_res = self.client.post(self.login_url, {
-            'email': email,
-            'password': password,
+            'email': self.admin_user_data['email'],
+            'password': self.admin_user_data['password'],
             })
         token = login_res.data['tokens']['access']
         res = self.client.get(self.list_user_url, HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_user_can_not_user_list_if_not_admin(self):
-        password = 'mypassword'
-        username='myuser'
-        email='myemail@test.com'
-        my_user = User.objects.create_user(username=username, email=email, password=password)
+        my_user = User.objects.create_user(username=self.user1_data['username'], email=self.user1_data['email'], password=self.user1_data['password'])
         login_res = self.client.post(self.login_url, {
-            'email': email,
-            'password': password,
+            'email': self.user1_data['email'],
+            'password': self.user1_data['password'],
             })
         token = login_res.data['tokens']['access']
         res = self.client.get(self.list_user_url, HTTP_AUTHORIZATION='Bearer {0}'.format(token))
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-    def test_create_user(self):
-        register_res = self.client.post(self.register_url, self.user_data)
-        login_res = self.client.post(self.login_url, self.user_data)
-        res = self.client.post(self.list_user_url, {'email': self.user_data['email'],'username': self.user_data['username']})
-        self.assertEqual(res.data['email'], self.user_data['email'])
-        self.assertEqual(res.data['username'], self.user_data['username'])
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+    def test_get_user_detail(self):
+        register1_res = self.client.post(self.register_url, self.user1_data)
+        login_res = self.client.post(self.login_url, self.user1_data)
+        token = login_res.data['tokens']['access']
+        res = self.client.get(self.detail_user_url, HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        # import pdb; pdb.set_trace()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-
-    # def test_get_user_detail(self):
-    #     register_res = self.client.post(self.register_url, self.user_data)
-    #     login_res = self.client.post(self.login_url, self.user_data)
-    #     create_user_response = self.client.post(self.list_user_url, {'email': self.user_data['email'],'username': self.user_data['username']})
-    #     res = self.client.get(self.detail_user_url)
-    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    def test_get_user_can_not_get_detail_of_other_user(self):
+        register1_res = self.client.post(self.register_url, self.user1_data)
+        register2_res = self.client.post(self.register_url, self.user2_data)
+        login_res = self.client.post(self.login_url, self.user2_data)
+        token = login_res.data['tokens']['access']
+        import pdb; pdb.set_trace()
+        res = self.client.get(self.detail_user_url, HTTP_AUTHORIZATION='Bearer {0}'.format(token))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
 
     # def test_update_user(self):
-    #     register_res = self.client.post(self.register_url, self.user_data)
-    #     login_res = self.client.post(self.login_url, self.user_data)
-    #     create_user_response = self.client.post(self.list_user_url, {'email': self.user_data['email'],'username': self.user_data['username']})
-    #     res = self.client.put(self.detail_user_url,  {'email': self.user_data['email'],'username': self.fake.name()})
-    #     self.assertNotEqual(res.data['username'], self.user_data['username'])
+    #     register_res = self.client.post(self.register_url, self.user1_data)
+    #     login_res = self.client.post(self.login_url, self.user1_data)
+    #     create_user_response = self.client.post(self.list_user_url, {'email': self.user1_data['email'],'username': self.user1_data['username']})
+    #     res = self.client.put(self.detail_user_url,  {'email': self.user1_data['email'],'username': self.fake.name()})
+    #     self.assertNotEqual(res.data['username'], self.user1_data['username'])
     #     self.assertEqual(res.status_code, status.HTTP_200_OK)
 
 
     # def test_delete_user(self):
-    #     create_user_response = self.client.post(self.list_user_url, {'email': self.user_data['email'],'username': self.user_data['username']})
+    #     create_user_response = self.client.post(self.list_user_url, {'email': self.user1_data['email'],'username': self.user1_data['username']})
     #     res = self.client.delete(self.detail_user_url)
     #     self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -98,22 +103,22 @@ class TestAuthViews(TestSetUp):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_user_can_register_correctly(self):
-        res = self.client.post(self.register_url, self.user_data)
-        self.assertEqual(res.data['email'], self.user_data['email'])
-        self.assertEqual(res.data['username'], self.user_data['username'])
+        res = self.client.post(self.register_url, self.user1_data)
+        self.assertEqual(res.data['email'], self.user1_data['email'])
+        self.assertEqual(res.data['username'], self.user1_data['username'])
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_user_can_login_after_register(self):
-        register = self.client.post(self.register_url, self.user_data)
-        res = self.client.post(self.login_url, self.user_data)
-        self.assertEqual(res.data['email'], self.user_data['email'])
+        register = self.client.post(self.register_url, self.user1_data)
+        res = self.client.post(self.login_url, self.user1_data)
+        self.assertEqual(res.data['email'], self.user1_data['email'])
         self.assertIsNotNone(res.data['tokens']['access'])
         self.assertIsNotNone(res.data['tokens']['refresh'])
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_user_can_refresh_token(self):
-        register_res = self.client.post(self.register_url, self.user_data)
-        login_res = self.client.post(self.login_url, self.user_data)
+        register_res = self.client.post(self.register_url, self.user1_data)
+        login_res = self.client.post(self.login_url, self.user1_data)
         self.assertIsNotNone(login_res.data['tokens']['access'])
         self.assertIsNotNone(login_res.data['tokens']['refresh'])
         self.assertEqual(login_res.status_code, status.HTTP_200_OK)
