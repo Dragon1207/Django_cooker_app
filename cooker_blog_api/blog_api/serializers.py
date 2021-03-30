@@ -14,13 +14,12 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     ingredient = IngredientSerializer(many=True, required=False)
+    author = UserSerializer(read_only=True)
     class Meta:
         model = Post
         fields = ['id', 'title', 'content', 'published', 'status', 'ingredient', 'author']
-        read_only_fields = ("id","author")
+        read_only_fields = ("id", "author",)
 
-    def pre_save(self, obj):
-        obj.author = self.request.user
 
     def get_or_create_ingredients(self, ingredient_data):
         list_ingredient = []
