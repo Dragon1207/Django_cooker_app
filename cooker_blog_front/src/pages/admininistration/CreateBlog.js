@@ -3,7 +3,7 @@ import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField}
 import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../axios";
 import {useHistory} from "react-router-dom";
-import Creatable from "react-select/creatable/dist/react-select.esm";
+import Creatable from "react-select/creatable";
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');

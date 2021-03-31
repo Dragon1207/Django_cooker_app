@@ -13,7 +13,7 @@ export default function BlogSidebar(props) {
   useEffect(() => {
     axiosInstance.get('blog/posts')
     .then(res => {
-      setData(res.data)
+      setData(res.data.filter(post => (post.status === "published")))
     })
   },[])
 
@@ -21,28 +21,20 @@ export default function BlogSidebar(props) {
     <>
       <Container maxWidth="lg" style={{marginTop:'5%'}}>
 			<Grid container spacing={2}>
-          <Grid md={8} lg={8} item>
+          <Grid xs={12} sm={8} md={8} lg={8} item>
 						{children}
           </Grid>
-          <Grid item md={4} lg={4} sm container>
+          <Grid item xs={12} sm={4} md={4} lg={4}  container>
             <Grid item xs container zeroMinWidth direction="column" spacing={2}>
-							<div className="widget-wrap">
-								<div className="single-sidebar-widget popular-post-widget">
-									<h4 className="popular-title">Récentes publications</h4>
-									<div className="popular-post-list">
-										{data?.map((post, i) => (
-											<div key={i} className="single-post-list d-flex flex-row align-items-center">
-												<div className="details">
-                          <Link to={'/post/'+ post.id}><h6>{post.title}</h6></Link>
-													<p>{(new Date(post.published)).toLocaleDateString()}</p>
-												</div>
-											</div>
-										))}
-																									
-									</div>
-								</div>
-							</div>
-
+              <h4>Récentes publications</h4>
+              <div>
+                {data?.map((post, i) => (
+                  <div key={i}>
+                    <Link to={'/post/'+ post.id}><h6>{post.title}</h6></Link>
+                    <p>{(new Date(post.published)).toLocaleDateString()}</p>
+                  </div>
+                ))}															
+              </div>
             </Grid>
           </Grid>
         </Grid>
