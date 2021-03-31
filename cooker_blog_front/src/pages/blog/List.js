@@ -12,9 +12,7 @@ const BlogListPage = () => {
   useEffect(() => {
     axiosInstance.get('blog/posts')
     .then(res => {
-      console.log(res.data);
-      setData(res.data)
-      console.log(data);
+      setData(res.data?.filter(post => (post.status === "published")))
     })
   },[])
 

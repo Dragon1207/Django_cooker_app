@@ -4,7 +4,7 @@ import BlogSidebar from '../../layout/BlogSidebar';
 import axiosInstance from '../../axios.js';
 import { Container, Paper, Typography } from '@material-ui/core';
 import { useParams } from 'react-router';
-//import { useQuery } from 'jsonapi-react';
+import { Link } from "react-router-dom";
 
 const SingleBlogPage = (props) => {
   const [data, setData] = useState([]);
@@ -13,9 +13,7 @@ const SingleBlogPage = (props) => {
   useEffect(() => {
     axiosInstance.get('blog/posts/'+id)
     .then(res => {
-      console.log(res.data);
       setData(res.data)
-      console.log(data);
     })
   },[])
   
@@ -28,7 +26,7 @@ const SingleBlogPage = (props) => {
           : 
           <Container maxWidth="lg">
             <Paper>
-              <Typography> Aucune recette à cette adresse.<br/> Revenir à la liste ? </Typography>
+              <Typography> Aucune recette à cette adresse.<br/> Revenir à la <Link to={'/posts'}>liste</Link> ? </Typography>
             </Paper>
           </Container>
         }
