@@ -8,9 +8,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import { red } from '@material-ui/core/colors';
-import dateFormat from 'dateformat';
 import Box from '@material-ui/core/Box';
-
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import moment from 'moment'
 const useStyles = makeStyles((theme) => ({
     root: {
       maxWidth: 345,
@@ -43,9 +44,10 @@ export default function Home() {
 
     return (
         <Container>
-            <Box display="flex" style={{ marginTop: '10%' }}>
+            <h2 style={{ marginTop: '7%', textAlign: 'center', fontWeight: 'bold' }}>Liste des recettes postés récemment :</h2>
+            <Box display="flex" style={{ marginTop: '5%' }}>
             {posts.map((post) => (
-                <Card className={classes.root} style={{ margin: 'auto' }}>
+                <Card className={classes.root} style={{ margin: 'auto', width: '24%' }}>
                 <CardHeader
                     avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
@@ -53,11 +55,11 @@ export default function Home() {
                     </Avatar>
                     }
                     title={post.title}
-                    subheader={post.published}
+                    subheader={moment(post.published).format("L")}
                 />
                 <CardMedia
                     className={classes.media}
-                    image="https://picsum.photos/200/300"
+                    image="https://picsum.photos/200/300/?blur"
                     title={post.title}
                 />
                 <CardContent style={{ textAlign: 'center' }}>
@@ -66,6 +68,17 @@ export default function Home() {
                 </Card>
             ))}
             </Box>
+            <div style={{ marginTop: '5%', textAlign: 'center', fontWeight: 'bold' }}>
+                <div>
+                <h1 >Envie de partager vos recette ?</h1>
+                <h5 style={{ marginTop: '3%' }}>Vous n'avez pas de compte : </h5>
+                {/* <AddCircleRoundedIcon /><a style={{ fontWeight: 'italic' }} to={'/login'} href="/login"> Inscrivez-vous</a> */}
+                <Button variant="contained" to={'/login'} href="/login">Inscrivez-vous</Button>
+                <h5 style={{ marginTop: '3%' }}>Sinon : </h5>
+                {/* <AccountCircleIcon /><a style={{ fontWeight: 'italic' }} to={'/register'} href="/register"> Connectez-vous</a> */}
+                <Button variant="contained" to={'/register'} href="/register">Connectez-vous</Button>
+                </div>
+            </div>
         </Container>
     );
 }
