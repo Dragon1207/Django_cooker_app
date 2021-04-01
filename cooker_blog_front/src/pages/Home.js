@@ -50,7 +50,7 @@ export default function Home() {
             <h2 style={{ marginTop: '5%', textAlign: 'center', fontWeight: 'bold' }}>Liste des recettes postés récemment :</h2>
             <Box display="flex" style={{ margin: '5% 10% 0 10%' }}>
             {posts.map((post) => (
-                <Card className={classes.root} style={{ margin: 'auto', width: '24%' }}>
+                <Card className={classes.root} style={{ margin: 'auto', width: '24%', padding: '0%'}}>
                 <CardHeader
                     avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
