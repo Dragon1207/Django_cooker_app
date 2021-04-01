@@ -11,6 +11,7 @@ import Login from './pages/authentification/Login';
 import Register from './pages/authentification/Register';
 import Profil from './pages/authentification/Profil';
 import ForgotPassword from './pages/authentification/ForgotPassword';
+import Home from './pages/Home'
 import './App.css';
 import ListBlog from "./pages/admininistration/ListBlog";
 import EditBlog from "./pages/admininistration/EditBlog";
@@ -154,6 +155,7 @@ function App() {
             renders the first one that matches the current URL. */}
           <Switch>
             <Route exact path="/">
+            <Home />
             </Route>
             <Route path="/search/:key">
               <SearchListPage search={key}/>
@@ -176,6 +178,9 @@ function App() {
             <Route path="/forgotpassword">
               <ForgotPassword />
             </Route>
+{/*             <Route path="/home">
+              <Home />
+            </Route> */}
             <PrivateRoute exact path="/admin/blog" component={ListBlog} />
             <PrivateRoute path="/admin/blog/:id/edit" component={EditBlog} />
             <PrivateRoute path="/admin/blog/create" component={CreateBlog} />
