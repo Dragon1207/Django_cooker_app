@@ -21,6 +21,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from .renderers import UserRenderer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 
@@ -70,29 +71,36 @@ class UserListAPIView(ListCreateAPIView):
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
     renderer_classes = (UserRenderer,)
+    # parser_classes = [MultiPartParser, FormParser]
 
-    # def perform_create(self, serializer):
-    #     return serializer.save(owner=self.request.user)
+    # def post(self, request, format=None):
+    #     serializer = PostSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def get_queryset(self):
-    #     return self.queryset.filter(owner=self.request.user)
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+
+    # def get_parsers(self):
+    #     if getattr(self, 'swagger_fake_view', False):
+    #         return []
+
+    #     return super().get_parsers()
 
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAdminUser | IsOwner]
+    #permission_classes = [IsAdminUser | IsOwner]
     renderer_classes = (UserRenderer,)
     queryset = User.objects.all()
     lookup_field = "id"
 
-    def perform_update(self, serializer):
-        if not self.request.user.is_staff == True:
-            return serializer.save(id=self.request.user.id)
-
-    def perform_destroy(self, serializer):
-        if not self.request.user.is_staff == True:
-            return serializer.save(id=self.request.user.id)
 
     def get_queryset(self):
-        if not self.request.user.is_staff == True:
-            return self.queryset.filter(id=self.request.user.id)
+        if self.request.user.is_staff == True:
+            return User.objects.all()
+        else:
+            return User.objects.filter(id=self.request.user.id)

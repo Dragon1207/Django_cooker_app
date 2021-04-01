@@ -23,6 +23,21 @@ export default function EditBlog() {
                 setTitle(res.data.title);
                 setContent(res.data.content);
                 setStatus(res.data.status);
+
+                var ingredientsDefaultList = [];
+                res.data.ingredient.map(item => {
+                    ingredientsDefaultList.push({label: item.name, value: item.id})
+                })
+                setIngredients(ingredientsDefaultList)
+            }
+        })();
+
+        (async function getIngredientOptions() {
+            const res = await axiosInstance.get('blog/ingredients/');
+            if(res.status === 200) {
+                res.data.map((item) => {
+                    ingredientOptions.push({label: item.name, value: item.id});
+                })
             }
         })();
 
@@ -54,11 +69,16 @@ export default function EditBlog() {
             return;
         }
 
+        var ingredientsFormatted = [];
+        ingredients.map(item => {
+            ingredientsFormatted.push({name: item.label});
+        })
+
         axiosInstance.patch('blog/posts/' + id + '/', {
             title: title,
             content: content,
             status: status,
-            ingredient: ingredients
+            ingredient: ingredientsFormatted
         }).then((res) => {
             history.push('/admin/blog', {success: 'Poste mis à jour avec succès.'});
         }).catch((e) => {
@@ -108,11 +128,12 @@ export default function EditBlog() {
                     onChange={(value, actionMeta) => {
                         var newIngredients = [];
                         value.map((item) => {
-                            newIngredients.push({name: item.label})
+                            newIngredients.push(item)
                         })
                         setIngredients(newIngredients);
                     }}
                     options={ingredientOptions}
+                    value={ingredients}
                 />
                 <FormControl variant="outlined" fullWidth margin="normal">
                     <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>

@@ -9,4 +9,5 @@ urlpatterns = [
     path('ingredients/', IngredientListAPIView.as_view(), name="list-ingredients"),
     path('ingredients/<int:id>/', IngredientDetailAPIView.as_view(), name="detail-ingredients"),
     path('search/', PostListDetailfilter.as_view(), name='search-posts'),
+    # path('imageupload/', Imageuploadviewset, name='upload-image')
 ]
