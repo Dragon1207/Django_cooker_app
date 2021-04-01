@@ -71,24 +71,24 @@ class UserListAPIView(ListCreateAPIView):
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
     renderer_classes = (UserRenderer,)
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
 
-    def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format=None):
+    #     serializer = PostSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
 
-    def get_parsers(self):
-        if getattr(self, 'swagger_fake_view', False):
-            return []
+    # def get_parsers(self):
+    #     if getattr(self, 'swagger_fake_view', False):
+    #         return []
 
-        return super().get_parsers()
+    #     return super().get_parsers()
 
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
