@@ -40,8 +40,8 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name='post_author')
     status = models.CharField(
         max_length=10, choices=OPTIONS, default='published')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()  # default manager
     postobjects = PostObjects()  # custom manager
 
