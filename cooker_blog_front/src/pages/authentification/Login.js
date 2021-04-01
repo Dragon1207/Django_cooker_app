@@ -138,7 +138,7 @@ export default function SignIn() {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                        className="login-submit"
                         onClick={handleSubmit}
                     >
                         Connexion
