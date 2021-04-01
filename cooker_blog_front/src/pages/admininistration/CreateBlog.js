@@ -1,18 +1,30 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../axios";
 import {useHistory} from "react-router-dom";
-import Creatable from "react-select/creatable/dist/react-select.esm";
+import Creatable from 'react-select/creatable';
 
 export default function CreateBlog() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [ingredients, setIngredients] = useState([{label: "Tomate", value: "tomate"}]);
+    const [ingredients, setIngredients] = useState([]);
     const [status, setStatus] = useState('draft');
     const [errors, setErrors] = useState({});
 
     let history = useHistory();
+
+    var ingredientOptions = [];
+    useEffect( () => {
+        (async function getIngredientOptions() {
+            const res = await axiosInstance.get('blog/ingredients/');
+            if(res.status === 200) {
+                res.data.map((item) => {
+                    ingredientOptions.push({label: item.name, value: item.id});
+                })
+            }
+        })()
+    }, [])
 
     const handleSubmit = () => {
         setErrors({});
@@ -36,7 +48,6 @@ export default function CreateBlog() {
             title: title,
             content: content,
             status: status,
-            author: localStorage.getItem('Id_User'),
             ingredient: ingredients
         }).then((res) => {
             history.push('/admin/blog', {success: 'Poste créé avec succès.'});
@@ -50,7 +61,7 @@ export default function CreateBlog() {
 
     return (
         <Container maxWidth="lg">
-            <h1>Créer un poste</h1>
+            <h1>Créer un article</h1>
             {errors.global &&
             <Alert severity="error" style={{marginBottom: '20px'}}>
                 {errors.global}
@@ -65,7 +76,6 @@ export default function CreateBlog() {
                     helperText={errors.title}
                     required
                     fullWidth
-                    margin="normal"
                     onChange={(e) => {setTitle(e.target.value)}}
                     value={title}
                 />
@@ -79,15 +89,21 @@ export default function CreateBlog() {
                     fullWidth
                     multiline
                     rows={10}
+                    margin="normal"
                     onChange={(e) => {setContent(e.target.value)}}
                     value={content}
                 />
+                <label>Ingrédients</label>
                 <Creatable
                     isMulti
                     onChange={(value, actionMeta) => {
-                        console.log(value);
+                        var newIngredients = [];
+                        value.map((item) => {
+                            newIngredients.push({name: item.label})
+                        })
+                        setIngredients(newIngredients);
                     }}
-                    options={ingredients}
+                    options={ingredientOptions}
                 />
                 <FormControl variant="outlined" fullWidth margin="normal">
                     <InputLabel id="demo-simple-select-outlined-label">Status</InputLabel>
