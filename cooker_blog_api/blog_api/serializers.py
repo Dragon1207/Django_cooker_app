@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Ingredient, Image
+from .models import Post, Ingredient
 from auth_api.serializers import UserSerializer
 
 
@@ -11,10 +11,10 @@ class IngredientSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Image
-        fields = '__all__'
+# class ImageSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Image
+#         fields = '__all__'
 
 
 
@@ -23,7 +23,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'published', 'status', 'ingredient', 'author', 'images']
+        fields = ['id', 'title', 'content', 'published', 'status', 'ingredient', 'author']
         read_only_fields = ("id", "author",)
 
 
@@ -43,17 +43,17 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredient_data = validated_data.pop('ingredient')
-        images_data = validated_data.pop('images')
+        # images_data = validated_data.pop('images')
         post = Post.objects.create(**validated_data)
         for i in self.get_or_create_ingredients(ingredient_data):
             post.ingredient.add(i)
-        for image in images_data:
-            post.images.add(image)
+        # for image in images_data:
+        #     post.images.add(image)
         return post
 
     def update(self, instance, validated_data):
         ingredient_data = validated_data.pop('ingredient')
-        images_data = validated_data.pop('images')
+        # images_data = validated_data.pop('images')
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
         instance.published = validated_data.get('published', instance.published)
