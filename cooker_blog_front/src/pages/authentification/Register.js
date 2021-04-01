@@ -61,8 +61,8 @@ export default function SignUp() {
              refresh: refresh_token,
          })
          .then((res) => {
-             if(res.status === 200){
-               localStorage.setItem('access', res.data.access);
+             if(res.data.status === 200){
+               localStorage.setItem('access', res.data.data.access);
                axiosInstance.defaults.headers['Authorization'] =
              'Bearer ' + access_token;
              }else{
@@ -88,10 +88,10 @@ export default function SignUp() {
                     password: formData.password,
                 })
                 .then((res) => {
-                    localStorage.setItem('access', res.data.tokens.access);
-                    localStorage.setItem('refresh', res.data.tokens.refresh);
-                    localStorage.setItem('Id_User', res.data.id);
-                    localStorage.setItem('is_staff', res.data.is_staff);
+                    localStorage.setItem('access', res.data.data.tokens.access);
+                    localStorage.setItem('refresh', res.data.data.tokens.refresh);
+                    localStorage.setItem('Id_User', res.data.data.id);
+                    localStorage.setItem('is_staff', res.data.data.is_staff);
                     axiosInstance.defaults.headers['Authorization'] =
                         'Bearer ' + access_token;
                     // console.log(res.data);

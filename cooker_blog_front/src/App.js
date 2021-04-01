@@ -97,7 +97,7 @@ function App() {
         })
         .then((res) => {
           localStorage.clear();
-          window.location.href= '/login';
+          window.location.href= '/';
           axiosInstance.defaults.headers['Authorization'] =
           'Bearer ' + access_token;
         });
