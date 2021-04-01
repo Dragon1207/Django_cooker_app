@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,6 +16,7 @@ import './App.css';
 import ListBlog from "./pages/admininistration/ListBlog";
 import EditBlog from "./pages/admininistration/EditBlog";
 import CreateBlog from "./pages/admininistration/CreateBlog";
+import SearchListPage from "./pages/blog/Search";
 import BlogListPage from "./pages/blog/List";
 import SingleBlogPage from "./pages/blog/Single";
 import {AppBar, Button, Container, Toolbar} from "@material-ui/core";
@@ -89,6 +90,8 @@ function App() {
         },
     }));
 
+    const [key, setKey] = useState("")
+
     const history = useHistory();
 
     const logout = () => {
@@ -119,13 +122,26 @@ function App() {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Chercher..."
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              name="Search"
+              onChange={(e) => {
+                setKey(e.target.value)
+                console.log(key);
+              }}
               inputProps={{ 'aria-label': 'search' }}
             />
+            <Button variant="contained" color="primary" type="submit">
+              <Link to={{
+                pathname: "/search/"+key,
+                state: {key: key} 
+              }} style={{color: '#FFF'}}>
+                Chercher
+              </Link>
+            </Button>
           </div>
           <div className="menuRight">
             {Id_User <= 0 && <Button><Link to="/login" style={{color: '#FFF'}}>Connexion</Link></Button> }
@@ -140,6 +156,9 @@ function App() {
           <Switch>
             <Route exact path="/">
             <Home />
+            </Route>
+            <Route path="/search/:key">
+              <SearchListPage search={key}/>
             </Route>
             <Route path="/posts">
               <BlogListPage/>
