@@ -14,4 +14,17 @@ const axiosInstance = axios.create({
         },
 });
 
+axiosInstance.post(`auth/token/refresh/`, {
+    refresh: localStorage.getItem('refresh')
+})
+.then((res) => {
+    if(res.status === 200){
+      localStorage.setItem('access', res.data.access);
+      axiosInstance.defaults.headers['Authorization'] =
+    'Bearer ' + localStorage.getItem('access');
+    }else{
+        window.location.href= '/login';
+    }
+});
+
 export default axiosInstance;

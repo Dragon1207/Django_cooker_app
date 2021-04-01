@@ -60,7 +60,7 @@ export default function SignIn() {
         })
         .then((res) => {
             if(res.status === 200){
-              localStorage.setItem('access', res.data.data.access);
+              localStorage.setItem('access', res.data.access);
               axiosInstance.defaults.headers['Authorization'] =
             'Bearer ' + access_token;
             }else{

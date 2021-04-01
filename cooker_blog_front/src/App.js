@@ -98,12 +98,12 @@ function App() {
         axiosInstance.post(`auth/logout/`, {
           refresh: refresh_token,
         })
-        .then((res) => {
-
-          localStorage.clear();
-          window.location.href= '/';
-        });
+        .then((res) => {});
+        
+        localStorage.clear();
+        window.location.href= '/';
     };
+
     const classes = useStyles();
 
   return (
