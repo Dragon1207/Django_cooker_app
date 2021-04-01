@@ -93,7 +93,6 @@ class UserListAPIView(ListCreateAPIView):
 
 class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    # permission_classes = [IsAdminUser , IsOwner]
     renderer_classes = (UserRenderer,)
     queryset = User.objects.all()
     lookup_field = "id"
