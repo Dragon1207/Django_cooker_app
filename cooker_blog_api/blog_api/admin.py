@@ -7,3 +7,4 @@ from auth_api.models import User
 
 admin.site.register(Post)
 admin.site.register(Ingredient)
+admin.site.register(Image)
