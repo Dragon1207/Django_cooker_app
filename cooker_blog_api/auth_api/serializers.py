@@ -91,11 +91,13 @@ class LogoutSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
 
         except TokenError:
-            self.fail('bad_token')
+            raise TokenError('Token is invalid or expired')
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'email', 'first_name', 'last_name', 'is_staff', ]
+        fields = ['id','username', 'email', 'first_name', 'last_name', 'is_staff', 'image']
         read_only_fields = ['id', 'is_staff']
+
+

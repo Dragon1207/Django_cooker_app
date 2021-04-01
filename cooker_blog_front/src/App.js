@@ -91,13 +91,12 @@ function App() {
     const history = useHistory();
 
     const logout = () => {
-      localStorage.clear();
-      window.location.href= '/login';
         axiosInstance.post(`auth/logout/`, {
           refresh: refresh_token,
         })
         .then((res) => {
-          
+          localStorage.clear();
+          window.location.href= '/login';
           axiosInstance.defaults.headers['Authorization'] =
           'Bearer ' + access_token;
         });
