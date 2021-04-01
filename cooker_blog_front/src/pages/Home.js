@@ -66,7 +66,7 @@ export default function Home() {
                     title={post.title}
                 />
                 <CardContent style={{ textAlign: 'center' }}>
-                <Button size="small" variant="outlined" color="primary">Voir plus</Button>
+                <Button size="small" variant="outlined" color="primary" href={'/blog/'+post.id}>Voir plus</Button>
                 </CardContent>
                 </Card>
             ))}
@@ -77,11 +77,10 @@ export default function Home() {
                     <h1>Envie de partager vos recette ?</h1>
                     <h5 style={{marginTop: '3%'}}>Vous n'avez pas de compte : </h5>
                     {/* <AddCircleRoundedIcon /><a style={{ fontWeight: 'italic' }} to={'/login'} href="/login"> Inscrivez-vous</a> */}
-                    <Button variant="contained" to={'/login'} href="/login"><AddCircleRoundedIcon/>&nbsp;Inscrivez-vous</Button>
+                    <Button variant="contained" to={'/register'} href="/register"><AddCircleRoundedIcon/>&nbsp;Inscrivez-vous</Button>
                     <h5 style={{marginTop: '2%'}}>Sinon : </h5>
                     {/* <AccountCircleIcon /><a style={{ fontWeight: 'italic' }} to={'/register'} href="/register"> Connectez-vous</a> */}
-                    <Button variant="contained" to={'/register'}
-                            href="/register"><AccountCircleIcon/>&nbsp;Connectez-vous</Button>
+                    <Button variant="contained" to={'/login'} href="/login"><AccountCircleIcon/>&nbsp;Connectez-vous</Button>
                 </div>
             </div>
             }

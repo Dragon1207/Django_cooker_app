@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import { Container, Paper} from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import Post from './Article';
-import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 
 
