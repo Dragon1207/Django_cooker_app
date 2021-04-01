@@ -94,16 +94,16 @@ export default function SignUp() {
                     localStorage.setItem('is_staff', res.data.data.is_staff);
                     axiosInstance.defaults.headers['Authorization'] =
                         'Bearer ' + access_token;
-                    // console.log(res.data);
+                    // console.log(res.data.data);
                     // history.push('/');
                     window.location.href= '/';
                 });
 
-                //  localStorage.setItem('access', res.data.tokens.access);
-                //  localStorage.setItem('refresh', res.data.tokens.refresh);
+                //  localStorage.setItem('access', res.data.data.tokens.access);
+                //  localStorage.setItem('refresh', res.data.data.tokens.refresh);
                 //  axiosInstance.defaults.headers['Authorization'] =
                 //      'Bearer ' + localStorage.getItem('access');
-                //  console.log(res.data);
+                //  console.log(res.data.data);
                 //  history.push('/');
              });
      };

@@ -1,51 +1,35 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SingleBlog from '../../components/Blog/Single';
 import BlogSidebar from '../../layout/BlogSidebar';
-//import { useQuery } from 'jsonapi-react';
+import axiosInstance from '../../axios.js';
+import { Container, Paper, Typography } from '@material-ui/core';
+import { useParams } from 'react-router';
+import { Link } from "react-router-dom";
 
-const SingleBlogPage = () => {
-  const data={
-    posts: [
-      {
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      },{
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      },{
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      }
-    ]
-  }
-  //const { data, error, isLoading } = useQuery('posts');
-  //console.log(useQuery('posts'));
+const SingleBlogPage = (props) => {
+  const [data, setData] = useState([]);
+  const { id } = useParams();
 
+  useEffect(() => {
+    axiosInstance.get('blog/posts/'+id)
+    .then(res => {
+      setData(res.data)
+    })
+  },[])
+  
   return (
     <>
       <BlogSidebar>
-        <SingleBlog data={data} />
+        {
+          Boolean(data) ? 
+          <SingleBlog data={data} />
+          : 
+          <Container maxWidth="lg">
+            <Paper>
+              <Typography> Aucune recette à cette adresse.<br/> Revenir à la <Link to={'/posts'}>liste</Link> ? </Typography>
+            </Paper>
+          </Container>
+        }
       </BlogSidebar>
     </>
   );

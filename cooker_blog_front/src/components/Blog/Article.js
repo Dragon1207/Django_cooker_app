@@ -1,23 +1,28 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
-import { Container} from '@material-ui/core';
+import { Link } from "react-router-dom";
+import {  Container, Grid, Typography} from '@material-ui/core';
 import Meta from './Meta';
+import Ingredient from './Ingredient';
 
 export default function Post(props) {
   const { data, error } = props;
+  const meta = {
+    date:data.published, 
+    author:data.author.first_name+" "+data.author.last_name
+  }
   return (
     <>
-      <Container>
-        <Row>
-          <Col xs md='3' lg='3' className="post-thumbnail" >
-            <img src={data.img} alt={data.title}/>
-          </Col>
-          <Col xs md='9' lg='9' className="content">
-            <a href={data.link}><h3>{data.title}</h3></a>
-            <p>{data.excerpt}...<a href={data.link}>Lire plus</a></p>
-          </Col>
-        </Row>
-        <Meta data={data.meta}/>
+      <Container maxWidth="lg" style={{marginBottom:'4%'}}>
+        <Grid container spacing={2}>
+          <Grid sm={3} md={3} lg={3} item>
+            <Ingredient data={data.ingredient}/>
+          </Grid>
+          <Grid item xs sm={9} md={9} lg={9} zeroMinWidth>
+          <Link to={'/post/'+ data.id}><h3>{data.title}</h3></Link>
+          <Typography noWrap>{data.content}</Typography><Link to={'/post/'+ data.id}>Lire plus</Link>
+            <Meta data={meta}/>
+            </Grid>
+        </Grid>
       </Container>
     </>
   );

@@ -1,8 +1,10 @@
 from .serializers import IngredientSerializer, PostSerializer
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from .models import Post, Ingredient
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.filters import SearchFilter
+
 
 
 class IngredientListAPIView(ListCreateAPIView):
@@ -18,12 +20,20 @@ class IngredientDetailAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field = "id"
 
 
+class PostListDetailfilter(ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['=title',]
 
 
 class PostListAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        return serializer.save(author=self.request.user)
 
 
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):

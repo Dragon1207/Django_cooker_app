@@ -1,51 +1,36 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import BlogList from '../../components/Blog/List';
 import BlogSidebar from '../../layout/BlogSidebar';
-//import { useQuery } from 'jsonapi-react';
+import axiosInstance from '../../axios.js';
+import { Container, Paper, Typography } from '@material-ui/core';
+
+
 
 const BlogListPage = () => {
-  const data={
-    posts: [
-      {
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      },{
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      },{
-        meta: {
-          cate:'categorie',
-          date:'date',
-          author:'auteur'
-        },
-        title: 'title',
-        img: 'img',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas ante felis, sed efficitur dui sagittis sed. Aliquam euismod ipsum eu vehicula scelerisque. Aliquam eget pharetra urna. Nam sem elit, vulputate at eleifend quis, imperdiet id odio. Sed id viverra orci. Nullam venenatis pulvinar eros, et faucibus massa finibus at. Pellentesque vehicula mauris nec turpis ultricies interdum. Nulla porttitor auctor vulputate',
-        link: 'link'
-      }
-    ]
-  }
-  //const { data, error, isLoading } = useQuery('posts');
-  //console.log(useQuery('posts'));
+  const [data, setData] = useState([]);
+  const [loadData, setLoadData] = useState(true);
+
+  useEffect(() => {
+    axiosInstance.get('blog/posts')
+    .then(res => {
+      setData(res.data?.filter(post => (post.status === "published")))
+      setLoadData(false)
+    })
+  },[])
 
   return (
     <>
       <BlogSidebar>
-        <BlogList data={data} />
+        {
+          !loadData ? 
+          <BlogList data={data} />
+          : 
+          <Container maxWidth="lg">
+            <Paper>
+              <Typography> Pas de recettes pour le moment.<br/> Revenez plus tard :) </Typography>
+            </Paper>
+          </Container>
+        }
       </BlogSidebar>
     </>
   );
