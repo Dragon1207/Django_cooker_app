@@ -68,8 +68,6 @@ class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         return serializer.save(author=self.request.user)
 
-    def perform_destroy(self, serializer):
-        return serializer.save(author=self.request.user)
 
     # def get_queryset(self):
     #     if self.request.user.is_staff == True:
