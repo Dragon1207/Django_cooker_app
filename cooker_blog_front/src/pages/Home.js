@@ -45,12 +45,12 @@ export default function Home() {
 
     return (<>
         <div>
-            <div class="banner" style={{ background: 'url(/food.jpeg) no-repeat fixed 50% 0', height: '15em', position: 'relative', overflow: 'hidden', width: '100%', }}>
+            <div className="banner" style={{ background: 'url(/food.jpeg) no-repeat fixed 50% 0', height: '15em', position: 'relative', overflow: 'hidden', width: '100%', }}>
             </div>
             <h2 style={{ marginTop: '5%', textAlign: 'center', fontWeight: 'bold' }}>Liste des recettes postés récemment :</h2>
             <Box display="flex" style={{ margin: '5% 10% 0 10%' }}>
-            {posts.map((post) => (
-                <Card className={classes.root} style={{ margin: 'auto', width: '24%', padding: '0%'}}>
+            {posts.map((post,i) => (
+                <Card key={i} className={classes.root} style={{ margin: 'auto', width: '24%', padding: '0%'}}>
                 <CardHeader
                     avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
@@ -66,7 +66,7 @@ export default function Home() {
                     title={post.title}
                 />
                 <CardContent style={{ textAlign: 'center' }}>
-                <Button size="small" variant="outlined" color="primary" href={'/blog/'+post.id}>Voir plus</Button>
+                <Button size="small" variant="outlined" color="primary" href={'/post/'+post.id}>Voir plus</Button>
                 </CardContent>
                 </Card>
             ))}
