@@ -1,5 +1,5 @@
 describe('Login', () => {
-    it('Fill form & ', () => {
+    it('Fill form & submit', () => {
         cy.visit('/login')
         cy.get('input[name="email"]').type('alexis.brohan@ynov.com');
         cy.get('input[name="password"]').type('password');
