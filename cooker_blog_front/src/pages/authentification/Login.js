@@ -56,11 +56,11 @@ export default function SignIn() {
 
     useEffect(() => {
         axiosInstance.post(`auth/token/refresh/`, {
-            refresh: refresh_token,
+            refresh: refresh_token
         })
         .then((res) => {
             if(res.status === 200){
-              localStorage.setItem('access', res.data.access);
+              localStorage.setItem('access', res.data.data.access);
               axiosInstance.defaults.headers['Authorization'] =
             'Bearer ' + access_token;
             }else{
@@ -85,7 +85,7 @@ export default function SignIn() {
                 localStorage.setItem('is_staff', res.data.data.is_staff);
                 axiosInstance.defaults.headers['Authorization'] =
                     'Bearer ' + access_token;
-                // console.log(res.data);
+                // console.log(res.data.data);
                 // history.push('/');
                 window.location.href= '/';
             })

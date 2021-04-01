@@ -92,18 +92,16 @@ function App() {
 
     const [key, setKey] = useState("")
 
-    const history = useHistory();
+    let history = useHistory();
 
     const logout = () => {
-      localStorage.clear();
-      window.location.href= '/login';
         axiosInstance.post(`auth/logout/`, {
           refresh: refresh_token,
         })
         .then((res) => {
-          
-          axiosInstance.defaults.headers['Authorization'] =
-          'Bearer ' + access_token;
+
+          localStorage.clear();
+          window.location.href= '/';
         });
     };
     const classes = useStyles();

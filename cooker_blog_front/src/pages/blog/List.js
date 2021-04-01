@@ -8,11 +8,13 @@ import { Container, Paper, Typography } from '@material-ui/core';
 
 const BlogListPage = () => {
   const [data, setData] = useState([]);
+  const [loadData, setLoadData] = useState(true);
 
   useEffect(() => {
     axiosInstance.get('blog/posts')
     .then(res => {
       setData(res.data?.filter(post => (post.status === "published")))
+      setLoadData(false)
     })
   },[])
 
@@ -20,7 +22,7 @@ const BlogListPage = () => {
     <>
       <BlogSidebar>
         {
-          Boolean(data) ? 
+          !loadData ? 
           <BlogList data={data} />
           : 
           <Container maxWidth="lg">

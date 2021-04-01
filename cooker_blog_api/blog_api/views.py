@@ -58,6 +58,9 @@ class PostListAPIView(ListCreateAPIView):
 
     #     return super().get_parsers()
 
+    def perform_create(self, serializer):
+        return serializer.save(author=self.request.user)
+
 
 class PostDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer

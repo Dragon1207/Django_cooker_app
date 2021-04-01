@@ -12,7 +12,7 @@ function Profil() {
     useEffect(() => {
          axiosInstance.get(`auth/users/${Id_User}/`)
          .then((res) => {
-            setUsername(res.data.username);
+            setUsername(res.data.data.username);
          });
      }, [])
 

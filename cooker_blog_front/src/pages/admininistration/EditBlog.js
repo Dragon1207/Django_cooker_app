@@ -3,7 +3,7 @@ import {Button, Container, FormControl, InputLabel, MenuItem, Select, TextField}
 import axiosInstance from "../../axios";
 import {useHistory, useParams} from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
-import Creatable from 'react-select/creatable';
+import Creatable from "react-select";
 
 export default function EditBlog() {
     const [title, setTitle] = useState('');
@@ -29,6 +29,15 @@ export default function EditBlog() {
                     ingredientsDefaultList.push({label: item.name, value: item.id})
                 })
                 setIngredients(ingredientsDefaultList)
+            }
+        })();
+
+        (async function getIngredientOptions() {
+            const res = await axiosInstance.get('blog/ingredients/');
+            if(res.status === 200) {
+                res.data.map((item) => {
+                    ingredientOptions.push({label: item.name, value: item.id});
+                })
             }
         })();
 
