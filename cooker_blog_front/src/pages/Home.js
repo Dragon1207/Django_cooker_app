@@ -66,7 +66,7 @@ export default function Home() {
                     title={post.title}
                 />
                 <CardContent style={{ textAlign: 'center' }}>
-                <Button size="small" variant="outlined" color="primary" href={'/blog/'+post.id}>Voir plus</Button>
+                <Button size="small" variant="outlined" color="primary" href={'/post/'+post.id}>Voir plus</Button>
                 </CardContent>
                 </Card>
             ))}

@@ -8,8 +8,9 @@ export default function Post(props) {
   const { data, error } = props;
   const meta = {
     date:data.published, 
-    author:data.author.first_name+" "+data.author.last_name
+    author:data.author.username
   }
+   
   return (
     <>
       <Container maxWidth="lg" style={{marginBottom:'4%'}}>
