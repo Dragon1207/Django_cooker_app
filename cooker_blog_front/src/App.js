@@ -107,7 +107,7 @@ function App() {
     const classes = useStyles();
 
   return (
-      <Router>
+      <Router forceRefresh={true}>
         <AppBar position="static">
           <Toolbar>
             <div className="menuLeft">
