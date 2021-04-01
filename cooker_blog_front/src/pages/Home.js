@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import moment from 'moment'
+
 const useStyles = makeStyles((theme) => ({
     root: {
       maxWidth: 345,
@@ -42,10 +43,12 @@ export default function Home() {
     
     const classes = useStyles();
 
-    return (
-        <Container>
-            <h2 style={{ marginTop: '7%', textAlign: 'center', fontWeight: 'bold' }}>Liste des recettes postés récemment :</h2>
-            <Box display="flex" style={{ marginTop: '5%' }}>
+    return (<>
+        <div>
+            <div class="banner" style={{ background: 'url(/food.jpeg) no-repeat fixed 50% 0', height: '15em', position: 'relative', overflow: 'hidden', width: '100%', }}>
+            </div>
+            <h2 style={{ marginTop: '5%', textAlign: 'center', fontWeight: 'bold' }}>Liste des recettes postés récemment :</h2>
+            <Box display="flex" style={{ margin: '5% 10% 0 10%' }}>
             {posts.map((post) => (
                 <Card className={classes.root} style={{ margin: 'auto', width: '24%' }}>
                 <CardHeader
@@ -68,17 +71,17 @@ export default function Home() {
                 </Card>
             ))}
             </Box>
-            <div style={{ marginTop: '5%', textAlign: 'center', fontWeight: 'bold' }}>
+            <div style={{ margin: '5% 0 5% 0', textAlign: 'center', fontWeight: 'bold' }}>
                 <div>
                 <h1 >Envie de partager vos recette ?</h1>
                 <h5 style={{ marginTop: '3%' }}>Vous n'avez pas de compte : </h5>
                 {/* <AddCircleRoundedIcon /><a style={{ fontWeight: 'italic' }} to={'/login'} href="/login"> Inscrivez-vous</a> */}
-                <Button variant="contained" to={'/login'} href="/login">Inscrivez-vous</Button>
-                <h5 style={{ marginTop: '3%' }}>Sinon : </h5>
+                <Button variant="contained" to={'/login'} href="/login"><AddCircleRoundedIcon />&nbsp;Inscrivez-vous</Button>
+                <h5 style={{ marginTop: '2%' }}>Sinon : </h5>
                 {/* <AccountCircleIcon /><a style={{ fontWeight: 'italic' }} to={'/register'} href="/register"> Connectez-vous</a> */}
-                <Button variant="contained" to={'/register'} href="/register">Connectez-vous</Button>
+                <Button variant="contained" to={'/register'} href="/register"><AccountCircleIcon />&nbsp;Connectez-vous</Button>
                 </div>
             </div>
-        </Container>
-    );
+        </div>
+    </>);
 }
